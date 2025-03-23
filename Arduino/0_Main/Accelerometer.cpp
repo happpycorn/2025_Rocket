@@ -8,14 +8,19 @@ float Accelerometer::getAverage(int axis, float buf[][3]) {
 
 bool Accelerometer::begin() {
     mpu.initialize();
-    if (!mpu.testConnection()) {
-        Serial.println("MPU6050 連接失敗！");
-        return false;  // 返回錯誤狀態
-    }
-    return true;  // 返回初始化成功狀態
+    return mpu.testConnection();
 }
 
-void Accelerometer::getData(float accelOut[3], float gyroOut[3]) {
+bool Accelerometer::getData(float accelOut[3], float gyroOut[3]) {
+
+    if (!mpu.testConnection()) {  // 檢查是否連接
+        for (int i = 0; i < 3; i++) {
+            accelOut[i] = 0.0;
+            gyroOut[i] = 0.0;
+        }
+        return false;
+    }
+
     int16_t accel[3];
     int16_t gyro[3];
 
@@ -33,4 +38,6 @@ void Accelerometer::getData(float accelOut[3], float gyroOut[3]) {
         accelOut[i] = getAverage(i, accel_buf);
         gyroOut[i] = getAverage(i, gyro_buf);
     }
+
+    return true;
 }
