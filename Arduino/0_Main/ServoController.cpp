@@ -5,7 +5,7 @@ ServoController::ServoController(int servoPin, int onAngle, int offAngle)
 
 void ServoController::begin() {
     servo.attach(pin);
-    setServoAngle(false)
+    setServoAngle(false);
     Serial.print("Servo attached to pin: ");
     Serial.println(pin);
 }
