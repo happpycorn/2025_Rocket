@@ -10,7 +10,7 @@ public:
     bool begin();
     
     // 讀取加速度、陀螺儀及磁場數據
-    bool getData(float accelOut[3], float gyroOut[3], float magOut[3]);
+    bool getData(float &accelOut[3], float &gyroOut[3], float &magOut[3]);
 
 private:
     MPU9250 mpu;

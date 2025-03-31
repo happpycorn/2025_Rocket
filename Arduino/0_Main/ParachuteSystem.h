@@ -46,8 +46,8 @@ private:
 public:
 
     void decideDeployment(
-        float altitude, float o_slope, 
-        bool deployedState[3], bool c1f, bool c2f
+        float altitude, float &o_slope, 
+        bool &deployedState[3], bool &c1f, bool &c2f
     );
 };
 

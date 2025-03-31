@@ -10,7 +10,7 @@ bool Accelerometer::begin() {
     return true;
 }
 
-bool Accelerometer::getData(float accelOut[3], float gyroOut[3], float magOut[3]) {
+bool Accelerometer::getData(float &accelOut[3], float &gyroOut[3], float &magOut[3]) {
     if (!mpu.readSensor()) {
         for (int i = 0; i < 3; i++) {
             accelOut[i] = 0.0;

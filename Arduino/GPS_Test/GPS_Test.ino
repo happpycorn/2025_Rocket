@@ -1,27 +1,35 @@
-#include <HardwareSerial.h>
+#include "GPSModule.h"
 
-HardwareSerial mySerial(1);  // 使用 Serial1
+// 使用 ESP32 的 UART2 (GPIO 16 = RX, GPIO 17 = TX)
+#define GPS_RX_PIN 16
+#define GPS_TX_PIN 17
+#define GPS_BAUD 9600
 
-// $GPRMC,074238.00,A,2501.09610,N,12132.95100,E,0.357,,100225,,,A*79
-// $GPVTG,,T,,M,0.357,N,0.661,K,A*23
-// $GPGGA,074238.00,2501.09610,N,12132.95100,E,1,04,2.79,45.9,M,17.1,M,,*67
-// $GPGSA,A,3,02,03,01,14,,,,,,,,,5.57,2.79,4.82*02
-// $GPGSV,1,1,04,01,60,034,30,02,51,029,29,03,39,128,26,14,46,326,26*7A
-// $GPGLL,2501.09610,N,12132.95100,E,074238.00,A,A*65
+// 初始化 GPS 數據
+GPSData gps_d = {0};
 
+GPSModule gpsModule(GPS_BAUD, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
+
+// 設置 ESP32
 void setup() {
-  // 初始化串口監控
-  Serial.begin(115200);
-  // 初始化 GPS 模組的串口（使用 ESP32 的 Serial1）
-  mySerial.begin(9600, SERIAL_8N1, 16, 17); // RX 是 GPIO 16, TX 是 GPIO 17
-
-  Serial.println("GPS 測試開始...");
+    Serial.begin(115200);
+    gpsModule.begin();
+    Serial.println("🚀 GPS 初始化完成...");
 }
 
+// 主循環
 void loop() {
-  // 當 GPS 模組有數據時
-  while (mySerial.available()) {
-    char c = mySerial.read(); // 讀取一個字元
-    Serial.print(c); // 輸出到串口監控
-  }
+    gpsModule.readGPS(&gps_d);
+
+    // 打印 GPS 數據
+    Serial.printf("📍 經緯度: %.6f, %.6f\n", gps_d.latitude, gps_d.longitude);
+    Serial.printf("🛰 衛星數: %d (可見: %d)\n", gps_d.numSatellites, gps_d.numVisibleSat);
+    Serial.printf("📏 高度: %.2f m (大地水準面: %.2f m)\n", gps_d.altitude, gps_d.geoidSeparation);
+    Serial.printf("🚀 地面速度: %.2f m/s\n", gps_d.groundSpeed);
+    Serial.printf("🧭 航向: %.2f°\n", gps_d.heading);
+    Serial.printf("📊 HDOP: %.2f, PDOP: %.2f\n", gps_d.hdop, gps_d.pdop);
+    Serial.printf("📡 訊號強度: %d\n", gps_d.signalQuality);
+    Serial.printf("⏰ UTC 時間: %06d\n", gps_d.utcTime);
+    
+    delay(1000);  // 1Hz 更新
 }

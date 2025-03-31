@@ -6,7 +6,7 @@ DataBuffer::saveData(SensorData data) {
     xQueueSend(dataQueue, &data, 0); // 傳入 Queue
 }
 
-DataBuffer::getData(TotalData data) {
+DataBuffer::getData(TotalData &data) {
 
     if (uxQueueMessagesWaiting(dataQueue) == 0) {
 
