@@ -11,6 +11,7 @@ public:
     void begin();
     void setServoAngle(bool newState);
     void toggle();
+    bool isOpen = false;
 
 private:
 
@@ -18,7 +19,6 @@ private:
     int pin;
     int angleOn;
     int angleOff;
-    bool isOpen = false;
 };
 
 #endif  // SERVO_CONTROLLER_H

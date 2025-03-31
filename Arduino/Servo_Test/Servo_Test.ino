@@ -11,7 +11,7 @@ private:
 
 public:
     // 建構函式，初始化伺服馬達
-    ServoController(int servoPin, int onAngle = 0, int offAngle = 120)
+    ServoController(int servoPin, int onAngle = 0, int offAngle = 90)
         : pin(servoPin), angleOn(onAngle), angleOff(offAngle) {}
 
     // 初始化伺服

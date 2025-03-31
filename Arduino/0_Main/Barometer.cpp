@@ -31,7 +31,7 @@ bool BMPController::getData(float &temperature, float &pressure, float &altitude
     altitude = bmp.readAltitude(1013.25);  // 設定標準氣壓 1013.25 hPa
 
     if (isnan(temperature) || isnan(pressure) || isnan(altitude)) {
-        Serial.println("數據無效，感測器可能未初始化或發生錯誤！");
+        Serial.println("氣壓計數據丟失");
         return false;
     }
 
