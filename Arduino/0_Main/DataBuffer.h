@@ -1,9 +1,7 @@
 #ifndef DATABUFFER_H
 #define DATABUFFER_H
 
-// #include <Arduino.h>
-// #include <FreeRTOS.h>
-#include <queue.h>   // 引入隊列相關函數
+#include <Arduino.h>
 #include <0_Config.h>
 
 class DataBuffer {

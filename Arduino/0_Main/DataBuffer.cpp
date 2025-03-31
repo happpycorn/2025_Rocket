@@ -2,11 +2,11 @@
 
 DataBuffer::DataBuffer(int length) : queueLength(length) {}
 
-DataBuffer::saveData(SensorData data) {
+void DataBuffer::saveData(SensorData data) {
     xQueueSend(dataQueue, &data, 0); // 傳入 Queue
 }
 
-DataBuffer::getData(TotalData &data) {
+bool DataBuffer::getData(TotalData &data) {
 
     if (uxQueueMessagesWaiting(dataQueue) == 0) {
 

@@ -18,14 +18,13 @@ DataBuffer dataBuffer; // 創建數據緩存器物件
 
 ParachuteSystem parachuteSystem;  // 創建開傘系統物件
 
-// 定義 Task Handle
-TaskHandle_t HighFreqTaskHandle;
-TaskHandle_t LowFreqTaskHandle;
+// 定義延遲時間
+const TickType_t xFrequencyTask1 = pdMS_TO_TICKS(TASK_1_DELAY_MS);  // Task1: 10ms = 100Hz
+const TickType_t xFrequencyTask2 = pdMS_TO_TICKS(TASK_2_DELAY_MS);  // Task2: 20ms = 50Hz
 
 // 高頻 Task（100Hz）：感測器讀取、開傘判斷、伺服控制
 void HighFreqTask(void *pvParameters) {
-    const TickType_t xFrequency = pdMS_TO_TICKS(10);  // 10ms = 100Hz
-    TickType_t xLastWakeTime = xTaskGetTickCount();
+    TickType_t xLastWakeTime = xTaskGetTickCount(); 
 
     while (1) {
 
@@ -37,7 +36,7 @@ void HighFreqTask(void *pvParameters) {
         int validCount = 0;
     
         // 取得所有數值
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < BMP_COUNT; i++) {
             float t, p, a;
             sensor_state.barometer[i] = bmps[i].getData(t, p, a);
             if (sensor_state.barometer[i]) {
@@ -81,6 +80,8 @@ void HighFreqTask(void *pvParameters) {
             sensorData.accels, 
             sensorData.gyros, 
             sensorData.mags, 
+            sensorData.aSqrt, 
+            sensorData.mDirection
         );
 
         // 儲存讀取狀態
@@ -104,13 +105,12 @@ void HighFreqTask(void *pvParameters) {
         dataBuffer.saveData(sensorData);
 
         // 保持 100Hz 更新
-        vTaskDelayUntil(&xLastWakeTime, xFrequency);
+        vTaskDelayUntil(&xLastWakeTime, xFrequencyTask1);
     }
 }
 
 // 低頻 Task（1Hz）：GPS 讀取、LoRa 傳輸、SD 卡存儲
 void LowFreqTask(void *pvParameters) {
-    const TickType_t xFrequency = pdMS_TO_TICKS(1000);  // 1 秒 = 1Hz
     TickType_t xLastWakeTime = xTaskGetTickCount();
     
     while (1) {
@@ -124,7 +124,7 @@ void LowFreqTask(void *pvParameters) {
         // saveDataToSD();
 
         // 保持 1Hz 更新
-        vTaskDelayUntil(&xLastWakeTime, xFrequency);
+        vTaskDelayUntil(&xLastWakeTime, xFrequencyTask2);
     }
 }
 
@@ -138,7 +138,7 @@ void setup() {
     
     for (int i = 0; i < BMP_COUNT; i++) { init_record.barometers[i] = bmps[i].begin(); }
 
-    init_record.accel = accel.begin();
+    init_record.accel = accel.begin(&Wire);
     init_record.hygro = hygro.begin();
 
     dataBuffer.createQueue();

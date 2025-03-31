@@ -1,7 +1,7 @@
 #ifndef PARACHUTE_SYSTEM_H
 #define PARACHUTE_SYSTEM_H
 
-#include <FreeRTOS.h>
+#include <Arduino.h>
 
 #define ALT_BUFFER_SIZE 100
 
@@ -47,7 +47,7 @@ public:
 
     void decideDeployment(
         float altitude, float &o_slope, 
-        bool &deployedState[3], bool &c1f, bool &c2f
+        bool *deployedState, bool &c1f, bool &c2f
     );
 };
 

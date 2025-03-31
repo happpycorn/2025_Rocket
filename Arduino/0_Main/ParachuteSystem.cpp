@@ -2,7 +2,7 @@
 
 void ParachuteSystem::decideDeployment(
     float altitude, float &o_slope, 
-    bool &deployedState[3], bool &c1f, bool &c2f
+    bool *deployedState, bool &c1f, bool &c2f
 ) {
     float slope = calculateSlope(altitude);
 

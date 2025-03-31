@@ -6,8 +6,11 @@
 #include "Accelerometer.h"
 #include "Barometer.h"
 #include "Hygrometer.h"
-#include "DataBuffer.h"
 #include "ParachuteSystem.h"
+
+// 定義延遲時間
+#define TASK_1_DELAY_MS 10
+#define TASK_2_DELAY_MS 1000
 
 // 標準氣壓 (海平面壓力)
 #define STANDARD_PRESSURE_1 1013.25
@@ -23,34 +26,6 @@
 #define SERVO_PIN_1 26
 #define SERVO_PIN_2 25
 #define SERVO_PIN_3 33
-
-struct SensorData {
-    float temperature;
-    float pressure;
-    float altitude;
-    float humidity;
-    float accels[3];
-    float gyros[3];
-    float mags[3];
-    float slope;
-    bool servos_state[3]; 
-    bool chute1Failed;
-    bool chute2Failed;
-    SensorState sensor_state;
-};
-
-struct TotalData : public SensorData {
-    GPSData gps;
-};
-
-struct InitData {
-    bool barometers[2];
-    bool accel;
-    bool hygro;
-    bool gps;
-    bool lora;
-    bool sdcard;
-};
 
 struct SensorState {
     bool barometer[2];
@@ -88,5 +63,37 @@ struct GPSData {
     float accEst;         // 位置精度估計（m）
     float accVel;         // 速度精度估計（m/s）
 };
+
+struct SensorData {
+    float temperature;
+    float pressure;
+    float altitude;
+    float humidity;
+    float accels[3];
+    float gyros[3];
+    float mags[3];
+    float aSqrt;
+    float mDirection;
+    float slope;
+    bool servos_state[3]; 
+    bool chute1Failed;
+    bool chute2Failed;
+    SensorState sensor_state;
+};
+
+struct TotalData : public SensorData {
+    GPSData gps;
+};
+
+struct InitData {
+    bool barometers[2];
+    bool accel;
+    bool hygro;
+    bool gps;
+    bool lora;
+    bool sdcard;
+};
+
+#include "DataBuffer.h"
 
 #endif  // CONFIG_H
