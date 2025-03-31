@@ -9,7 +9,6 @@ bool Hygrometer::getData(float &temperature, float &humidity) {
     humidity = shtc3.readHumidity();  // 讀取濕度
 
     if (isnan(temperature) || isnan(humidity)) {
-        Serial.println("濕度計數據丟失");
         return false;  // 數據丟失，返回 false
     }
 

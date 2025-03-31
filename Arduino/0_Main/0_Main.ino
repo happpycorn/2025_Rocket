@@ -14,6 +14,10 @@ BMPController bmps[BMP_COUNT] = {
 Accelerometer accel;  // 創建 IMU 物件
 Hygrometer hygro;  // 創建濕度計物件
 
+GPSModule gpsModule(GPS_BAUD, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
+LoRaDataSender loRaDataSender;
+SDDataManager sdManager;
+
 DataBuffer dataBuffer; // 創建數據緩存器物件
 
 ParachuteSystem parachuteSystem;  // 創建開傘系統物件
@@ -114,14 +118,21 @@ void LowFreqTask(void *pvParameters) {
     TickType_t xLastWakeTime = xTaskGetTickCount();
     
     while (1) {
+        TotalData data;
+
+        // 讀取資料
+        data.isHaveSensor = dataBuffer.readData(&data);
+
         // 讀取 GPS
-        Serial.println("低頻 Task：GPS 讀取 & LoRa 傳輸 & SD 卡存儲");
+        GPSData gps_d = {0};
+        gpsModule.readGPS(&gps_d);
+        data.gps_data = gps_d;
         
         // LoRa 傳輸
-        // sendDataLoRa();
+        loRaDataSender.sendTotalData(data);
         
         // SD 卡存儲
-        // saveDataToSD();
+        sdManager.saveData(data);
 
         // 保持 1Hz 更新
         vTaskDelayUntil(&xLastWakeTime, xFrequencyTask2);
@@ -130,6 +141,7 @@ void LowFreqTask(void *pvParameters) {
 
 void setup() {
     Serial.begin(115200);
+    while (!Serial);
     Wire.begin();
 
     InitData init_record;
@@ -140,6 +152,9 @@ void setup() {
 
     init_record.accel = accel.begin(&Wire);
     init_record.hygro = hygro.begin();
+    init_record.gps = gps.begin();
+    init_record.lora = loRaDataSender.begin();
+    init_record.sdcard = sdManager.begin();
 
     dataBuffer.createQueue();
 

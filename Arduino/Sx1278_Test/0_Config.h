@@ -1,32 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-// 定義延遲時間
-#define TASK_1_DELAY_MS 10
-#define TASK_2_DELAY_MS 1000
-
-// 標準氣壓 (海平面壓力)
-#define STANDARD_PRESSURE_1 1013.25
-#define STANDARD_PRESSURE_2 1013.25
-
-// 氣壓計 I2C 地址
-#define BMP_COUNT 2
-#define BMP_I2C_ADDRESS_1 0x76 
-#define BMP_I2C_ADDRESS_2 0x77 
-
-// 伺服馬達腳位設置
-#define SERVO_COUNT 3
-#define SERVO_PIN_1 26
-#define SERVO_PIN_2 25
-#define SERVO_PIN_3 33
-
-// GPS 設定
-#define GPS_RX_PIN 16
-#define GPS_TX_PIN 17
-#define GPS_BAUD 9600
-
-#include <cstdint>
-
 struct SensorState {
     bool barometer[2];
     bool accel;
@@ -85,25 +59,5 @@ struct TotalData : public SensorData {
     bool isHaveSensor;
     GPSData gps_data;
 };  
-
-struct InitData {
-    bool barometers[2];
-    bool accel;
-    bool hygro;
-    bool gps;
-    bool lora;
-    bool sdcard;
-};
-
-// 引入必要的庫
-#include "Barometer.h"
-#include "GPSModule.h"
-#include "Hygrometer.h"
-#include "DataBuffer.h"
-#include "Accelerometer.h"
-#include "SDDataManager.h"
-#include "LoRaDataSender.h"
-#include "ServoController.h"
-#include "ParachuteSystem.h"
 
 #endif  // CONFIG_H
