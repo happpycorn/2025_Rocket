@@ -15,13 +15,22 @@ void loop() {
     float acc[3], gyro[3], mag[3], aSqrt, mD;
     if (accel.getData(acc, gyro, mag, aSqrt, mD)) {
         Serial.print("Accel: ");
-        for (int i = 0; i < 3; i++) { Serial.print(acc[i]); }
+        for (int i = 0; i < 3; i++) { 
+            Serial.print(acc[i]); 
+            Serial.print(","); 
+        }
         Serial.println();
         Serial.print("Gyro: ");
-        for (int i = 0; i < 3; i++) { Serial.print(gyro[i]); }
+        for (int i = 0; i < 3; i++) { 
+            Serial.print(gyro[i]); 
+            Serial.print(","); 
+        }
         Serial.println();
         Serial.print("Mag: ");
-        for (int i = 0; i < 3; i++) { Serial.print(mag[i]); }
+        for (int i = 0; i < 3; i++) {
+            Serial.print(mag[i]);
+            Serial.print(",");
+        }
         Serial.println();
         Serial.print("aSqrt: "); Serial.println(aSqrt);
         Serial.print("mDirection: "); Serial.println(mD);

@@ -16,7 +16,7 @@ public:
 
     // 儲存數據方法
     void saveData(SensorData data);
-    bool getData(TotalData &data);
+    bool getData(TotalData& data);
     void createQueue();  // 創建 Queue 方法
 
 };

@@ -121,7 +121,7 @@ void LowFreqTask(void *pvParameters) {
         TotalData data;
 
         // 讀取資料
-        data.isHaveSensor = dataBuffer.readData(&data);
+        data.isHaveSensor = dataBuffer.getData(data);
 
         // 讀取 GPS
         GPSData gps_d = {0};
@@ -152,7 +152,7 @@ void setup() {
 
     init_record.accel = accel.begin(&Wire);
     init_record.hygro = hygro.begin();
-    init_record.gps = gps.begin();
+    init_record.gps = gpsModule.begin();
     init_record.lora = loRaDataSender.begin();
     init_record.sdcard = sdManager.begin();
 
