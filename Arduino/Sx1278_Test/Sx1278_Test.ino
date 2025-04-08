@@ -1,19 +1,16 @@
+#include "0_Config.h"
 #include "LoRaDataSender.h"
 
-LoRaDataSender loRaDataSender;
+LoRaDataSender sender(Serial1, 9600, 12, 13); // 初始化時就決定通訊參數
 
 void setup() {
     Serial.begin(115200);
-    while (!Serial);
-    if (!loRaDataSender.begin()) {
-        Serial.println("LoRa initialization failed");
-        return;
-    }
+    sender.begin(); // 更簡單
+
+    TotalData data;
+
+    sender.sendTotalData(data);
+    Serial.println("finish");
 }
 
-void loop() {
-    TotalData data;
-    // 填充 TotalData 數據...
-    loRaDataSender.sendTotalData(data);  // 發送數據
-    delay(1000);
-}
+void loop() {}

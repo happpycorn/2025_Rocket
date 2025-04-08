@@ -1,24 +1,24 @@
-#ifndef LoRaDataSender_h
-#define LoRaDataSender_h
+#ifndef LORA_DATA_SENDER_H
+#define LORA_DATA_SENDER_H
 
-#include <SPI.h>
-#include <LoRa.h>
+#include <Arduino.h>
 #include "0_Config.h"
-
-#define NSS     5       // CS 引腳
-#define RESET   4       // RESET 引腳
-#define DIO0    15      // DIO0 引腳
-#define FREQ    433E6   // 频率
 
 class LoRaDataSender {
 public:
+    LoRaDataSender(HardwareSerial& serial, uint32_t baud = 9600, int8_t rxPin = 12, int8_t txPin = 13)
+        : loraSerial(serial), baudRate(baud), rx(rxPin), tx(txPin) {}
 
-    bool begin();
-    void sendTotalData(TotalData &data);
+    void begin();
+    void sendTotalData(const TotalData &data);
 
 private:
+    HardwareSerial& loraSerial;
+    uint32_t baudRate;
+    int8_t rx, tx;
 
-    void serializeTotalData(TotalData &data, byte *buffer);
+    void serializeTotalData(const TotalData &data, byte *buffer, size_t &len);
+    void sendBufferAsHex(byte* buffer, size_t len);
 };
 
-#endif // LoRaDataSender_h
+#endif
