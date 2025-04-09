@@ -5,12 +5,9 @@ bool Hygrometer::begin() {
 }
 
 bool Hygrometer::getData(float &temperature, float &humidity) {
-    temperature = shtc3.readTemperature();  // 讀取溫度
-    humidity = shtc3.readHumidity();  // 讀取濕度
-
-    if (isnan(temperature) || isnan(humidity)) {
-        return false;  // 數據丟失，返回 false
-    }
-
-    return true;  // 成功讀取數據，返回 true
+    sensors_event_t h, t;
+    bool succ = shtc3.getEvent(&h, &t);
+    humidity = h.relative_humidity;  // 讀取濕度
+    temperature = t.temperature;  // 讀取溫度
+    return succ;
 }

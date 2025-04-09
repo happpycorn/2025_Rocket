@@ -108,7 +108,7 @@ bool ParachuteSystem::isLaunchCondition(
     float launch_slope,      // 參考斜率
     float alt_upper_bound, float alt_below_bound // 高度範圍
 ) {
-    bool isSlopeValid = slope > launch_slope;
+    bool isSlopeValid = slope < launch_slope;
     bool isAltitudeValid = (alt_upper_bound > alt) && (alt > alt_below_bound);
     return isSlopeValid && isAltitudeValid;
 }

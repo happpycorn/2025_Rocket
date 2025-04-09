@@ -7,13 +7,12 @@ void setup() {
 
     Wire.begin();
 
-    // 初始化 BMP280 感測器
     if (!hgyro.begin()) {
-        Serial.println("BMP390 初始化失敗！");
-        while (1);  // 如果初始化失敗，停在這裡
+        Serial.println("SHTC3 初始化失敗！");
+        while (1);
     }
 
-    Serial.println("BMP390 初始化成功！");
+    Serial.println("SHTC3 初始化成功！");
 }
 
 void loop() {

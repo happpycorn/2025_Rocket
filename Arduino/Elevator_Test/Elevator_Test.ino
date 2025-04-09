@@ -1,112 +1,95 @@
-#include <Adafruit_BMP280.h>
+#include "Barometer.h"
+#include "Accelerometer.h"
+#include "ParachuteSystem.h"
 
-class BMPController {
-public:
+#include <SD.h>
+#include <SPI.h>
 
-    BMPController(uint8_t address, float std_pressure);
+#define BMP390_I2C_ADDRESS_1 0x76
+#define BMP390_I2C_ADDRESS_2 0x77
+#define STANDARD_PRESSURE_1 1009.40
+#define STANDARD_PRESSURE_2 1009.63
 
-    bool begin();
-    bool getData(float &temperature, float &pressure, float &altitude);
+const int chipSelect = 5;  // SD 卡模組的 Chip Select 腳位，根據你的接線修改
 
-private:
+BMPController bmpController_1(BMP390_I2C_ADDRESS_1, STANDARD_PRESSURE_1);
+BMPController bmpController_2(BMP390_I2C_ADDRESS_2, STANDARD_PRESSURE_2);
 
-    Adafruit_BMP280 bmp;
-    uint8_t i2cAddress;   // I2C 地址
-    float std_pressure;
-};
+Accelerometer accel;
 
-BMPController::BMPController(uint8_t address, float pressure)
-    : i2cAddress(address), std_pressure(pressure) {}
-
-bool BMPController::begin() {
-
-    if (!bmp.begin(i2cAddress)) {  // 初始化 BMP280
-        Serial.println("BMP280 初始化失敗！");
-        return false;
-    }
-    
-    bmp.setSampling(
-        Adafruit_BMP280::MODE_FORCED,   // 測量一次後進入休眠，節省功耗 (NORMAL 模式下可連續測量)
-        Adafruit_BMP280::SAMPLING_X2,   // 溫度採樣倍率 (X1 ~ X16，數值越大精度越高)
-        Adafruit_BMP280::SAMPLING_X16,  // 氣壓採樣倍率 (X1 ~ X16)
-        Adafruit_BMP280::FILTER_X16,    // 濾波強度 (OFF, X2, X4, X8, X16)
-        Adafruit_BMP280::STANDBY_MS_1   // NORMAL 模式下的休眠時間 (1 ~ 4000ms，FORCED 模式無效)
-    );
-    
-    Serial.println("BMP280 初始化成功！");
-    return true;
-}
-
-bool BMPController::getData(float &temperature, float &pressure, float &altitude) {
-
-    bmp.takeForcedMeasurement();
-
-    temperature = bmp.readTemperature();
-    pressure = bmp.readPressure() / 100.0F;  // 轉換為 hPa
-    altitude = bmp.readAltitude(std_pressure);  // 設定標準氣壓 1013.25 hPa
-
-    if (isnan(temperature) || isnan(pressure) || isnan(altitude)) {
-        Serial.println("數據無效，感測器可能未初始化或發生錯誤！");
-        return false;
-    }
-
-    return true;
-}
-
-#include <Wire.h>
-
-#define BMP280_I2C_ADDRESS_1 0x76
-#define BMP280_I2C_ADDRESS_2 0x77
-#define STANDARD_PRESSURE 1015.00
-#define SAMPLE_INTERVAL 100000  // 10Hz, 100000 微秒 (100ms)
-
-BMPController bmp1(BMP280_I2C_ADDRESS_1, STANDARD_PRESSURE);
-BMPController bmp2(BMP280_I2C_ADDRESS_2, STANDARD_PRESSURE);
+ParachuteSystem parachuteSystem;
 
 void setup() {
-    Serial.begin(115200);
-    
-    if (!bmp1.begin()) {
-        Serial.println("BMP280 #1 初始化失敗！");
+    Serial.begin(115200);  // 初始化串口通信
+    Wire.begin(SDA_PIN, SCL_PIN);
+
+    if (!bmpController_1.begin()) {
+        Serial.println("BMP390 1 初始化失敗！");
+        while (1);  // 如果初始化失敗，停在這裡
+    }
+
+    if (!bmpController_2.begin()) {
+        Serial.println("BMP390 2 初始化失敗！");
+        while (1);  // 如果初始化失敗，停在這裡
+    }
+
+    if (!accel.begin(&Wire)) {
+        Serial.println("Could not find MPU9250");
         while (1);
     }
-    if (!bmp2.begin()) {
-        Serial.println("BMP280 #2 初始化失敗！");
-        while (1);
+
+    if (!SD.begin(chipSelect)) {
+        Serial.println("SD 卡初始化失敗！");
+        while (1);  // 如果初始化失敗，停在這裡
     }
-    Serial.println("BMP280 初始化成功！");
+
+    Serial.println("初始化成功！");
 }
 
-static uint64_t nextSampleTime = 0;  // 使用 64-bit 儲存
 void loop() {
-    uint64_t now = micros();  // 直接使用 64-bit
+    float temperature_1, pressure_1, altitude_1;
+    float temperature_2, pressure_2, altitude_2;
+    float acc[3], gyro[3], mag[3], aSqrt, mD;
+    bool is_bmp_1, is_bmp_2, is_acc;
 
-    // 使用 while 來塞住，直到下一次取樣時間
-    while (now < nextSampleTime) {
-        now = micros();  // 更新時間
-    }
+    unsigned long long now = millis();  // 時間戳記（ms）
 
-    nextSampleTime += SAMPLE_INTERVAL;
+    is_bmp_1 = bmpController_1.getData(temperature_1, pressure_1, altitude_1);
+    is_bmp_2 = bmpController_2.getData(temperature_2, pressure_2, altitude_2);
+    is_acc = accel.getData(acc, gyro, mag, aSqrt, mD);
 
-    float temp1, press1, alt1;
-    float temp2, press2, alt2;
-
-    if (bmp1.getData(temp1, press1, alt1) && bmp2.getData(temp2, press2, alt2)) {
-        Serial.print(now);
-        Serial.print(",");
-        Serial.print(temp1);
-        Serial.print(",");
-        Serial.print(press1);
-        Serial.print(",");
-        Serial.print(alt1);
-        Serial.print(",");
-        Serial.print(temp2);
-        Serial.print(",");
-        Serial.print(press2);
-        Serial.print(",");
-        Serial.print(alt2);
-        Serial.println();
+    float current_altitude;
+    if (is_bmp_1 && is_bmp_2) {
+        current_altitude = (altitude_1 + altitude_2) / 2.0;
+    } else if (is_bmp_1) {
+        current_altitude = altitude_1;
+    } else if (is_bmp_2) {
+        current_altitude = altitude_2;
     } else {
-        Serial.println("獲取數據失敗！");
+        current_altitude = -1.0; // 代表無法取得高度
     }
+
+    float slope = parachuteSystem.calculateSlope(now, current_altitude);
+
+    File dataFile = SD.open("/data.csv", FILE_APPEND);
+    if (dataFile) {
+        Serial.print("Time: "); Serial.print(now); Serial.print(", ");
+        Serial.print("Altitude 1: "); Serial.print(altitude_1); Serial.print(", ");
+        Serial.print("Altitude 2: "); Serial.print(altitude_2); Serial.print(", ");
+        Serial.print("Current Altitude: "); Serial.print(current_altitude); Serial.print(", ");
+        Serial.print("Slope: "); Serial.print(slope); Serial.print(", ");
+        Serial.print("aSqrt: "); Serial.println(acc[2]);
+        
+        dataFile.print(now); dataFile.print(",");
+        dataFile.print(altitude_1); dataFile.print(",");
+        dataFile.print(altitude_2); dataFile.print(",");
+        dataFile.print(current_altitude); dataFile.print(",");
+        dataFile.print(slope); dataFile.print(",");
+        dataFile.println(acc[2]);
+        dataFile.close();
+    } else {
+        Serial.println("無法寫入 SD 卡");
+    }
+
+    delay(100);
 }

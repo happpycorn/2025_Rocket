@@ -1,7 +1,7 @@
 #ifndef HYGROMETER_H
 #define HYGROMETER_H
 
-#include <Adafruit_SHT31.h>
+#include <Adafruit_SHTC3.h>
 
 class Hygrometer {
 public:
@@ -13,7 +13,7 @@ public:
 
 private:
 
-    Adafruit_SHT31 shtc3;
+    Adafruit_SHTC3 shtc3 = Adafruit_SHTC3();
 };
 
 #endif  // HYGROMETER_H

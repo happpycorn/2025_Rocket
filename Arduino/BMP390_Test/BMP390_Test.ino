@@ -1,7 +1,7 @@
 #include "Barometer.h"
 
-#define BMP390_I2C_ADDRESS 0x70
-#define STANDARD_PRESSURE 1013.25
+#define BMP390_I2C_ADDRESS 0x76
+#define STANDARD_PRESSURE 1009.63
 
 BMPController bmpController(BMP390_I2C_ADDRESS, STANDARD_PRESSURE);
 

@@ -60,6 +60,6 @@ struct SensorData {
 struct TotalData : public SensorData {
     bool isHaveSensor;
     GPSData gps_data;
-};  
+};
 
 #endif  // CONFIG_H
