@@ -69,7 +69,8 @@ void loop() {
         current_altitude = -1.0; // 代表無法取得高度
     }
 
-    float slope = parachuteSystem.calculateSlope(now, current_altitude);
+    float slope, sub_slope;
+    parachuteSystem.calculateSlope(now, current_altitude, slope, sub_slope);
 
     File dataFile = SD.open("/data.csv", FILE_APPEND);
     if (dataFile) {
@@ -78,6 +79,7 @@ void loop() {
         Serial.print("Altitude 2: "); Serial.print(altitude_2); Serial.print(", ");
         Serial.print("Current Altitude: "); Serial.print(current_altitude); Serial.print(", ");
         Serial.print("Slope: "); Serial.print(slope); Serial.print(", ");
+        Serial.print("Sub Slope: "); Serial.print(sub_slope); Serial.print(", ");
         Serial.print("aSqrt: "); Serial.println(acc[2]);
         
         dataFile.print(now); dataFile.print(",");
@@ -85,6 +87,7 @@ void loop() {
         dataFile.print(altitude_2); dataFile.print(",");
         dataFile.print(current_altitude); dataFile.print(",");
         dataFile.print(slope); dataFile.print(",");
+        dataFile.print(sub_slope); dataFile.print(",");
         dataFile.println(acc[2]);
         dataFile.close();
     } else {
