@@ -1,6 +1,8 @@
 import pandas as pd
 from PIL import Image, ImageDraw, ImageFont
 
+# Test
+
 OUTPUT_PATH = r"output.png"
 CSV_PATH = r"risk/float.csv"
 SYS_NAME = "漂浮系統"
