@@ -1,42 +1,6 @@
-#include <ESP32Servo.h>
+#include "ServoController.h"
 
-class ServoController {
-private:
-
-    Servo servo;
-    int pin;
-    int angleOn;
-    int angleOff;
-    bool isOpen = false;
-
-public:
-    // 建構函式，初始化伺服馬達
-    ServoController(int servoPin, int onAngle = 0, int offAngle = 90)
-        : pin(servoPin), angleOn(onAngle), angleOff(offAngle) {}
-
-    // 初始化伺服
-    void begin() {
-        servo.attach(pin);
-        Serial.print("Servo attached to pin: ");
-        Serial.println(pin);
-    }
-
-    // 設定伺服角度
-    void setServoAngle(bool newState) {
-        isOpen = newState;
-        int angle = isOpen ? angleOn : angleOff;
-        servo.write(angle);
-        Serial.print("Servo is ");
-        Serial.println(isOpen ? "open" : "close");
-    }
-
-    // 切換狀態
-    void toggle() {
-        setServoAngle(!isOpen);
-    }
-};
-
-#define SERVO_PIN 25  // 你的伺服馬達腳位
+#define SERVO_PIN 25
 
 ServoController myServo(SERVO_PIN);
 
