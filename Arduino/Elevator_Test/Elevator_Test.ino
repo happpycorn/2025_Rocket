@@ -16,22 +16,22 @@ const int chipSelect = 5;  // SD 卡模組的 Chip Select 腳位，根據你的�
 
 ServoController myServo(SERVO_PIN);
 
-BMPController bmpController_1(BMP390_I2C_ADDRESS_1, STANDARD_PRESSURE_1);
-BMPController bmpController_2(BMP390_I2C_ADDRESS_2, STANDARD_PRESSURE_2);
+BMPController bmp_1(BMP390_I2C_ADDRESS_1, STANDARD_PRESSURE_1);
+BMPController bmp_2(BMP390_I2C_ADDRESS_2, STANDARD_PRESSURE_2);
 
-ParachuteSystem parachuteSystem;
+ParachuteSystem prcSystem;
 
 void setup() {
     Serial.begin(115200);  // 初始化串口通信
 
     myServo.begin();
 
-    if (!bmpController_1.begin()) {
+    if (!bmp_1.begin()) {
         Serial.println("BMP390 1 初始化失敗！");
         while (1);  // 如果初始化失敗，停在這裡
     }
 
-    if (!bmpController_2.begin()) {
+    if (!bmp_2.begin()) {
         Serial.println("BMP390 2 初始化失敗！");
         while (1);  // 如果初始化失敗，停在這裡
     }
@@ -44,8 +44,8 @@ void setup() {
     float temperature_1, pressure_1, altitude_1;
     float temperature_2, pressure_2, altitude_2;
 
-    bmpController_1.getData(temperature_1, pressure_1, altitude_1);
-    bmpController_2.getData(temperature_2, pressure_2, altitude_2);
+    bmp_1.getData(temperature_1, pressure_1, altitude_1);
+    bmp_2.getData(temperature_2, pressure_2, altitude_2);
 
     Serial.println("初始化成功！");
 }
@@ -57,8 +57,8 @@ void loop() {
 
     unsigned long long now = millis();  // 時間戳記（ms）
 
-    is_bmp_1 = bmpController_1.getData(temperature_1, pressure_1, altitude_1);
-    is_bmp_2 = bmpController_2.getData(temperature_2, pressure_2, altitude_2);
+    is_bmp_1 = bmp_1.getData(temperature_1, pressure_1, altitude_1);
+    is_bmp_2 = bmp_2.getData(temperature_2, pressure_2, altitude_2);
 
     float current_altitude;
     if (is_bmp_1 && is_bmp_2) {
@@ -72,10 +72,10 @@ void loop() {
     }
 
     float slope, sub_slope;
-    parachuteSystem.calculateSlope(now, current_altitude, slope, sub_slope);
+    prcSystem.calculateSlope(now, current_altitude, slope, sub_slope);
 
     bool isLaunch;
-    parachuteSystem.decideDeployment(current_altitude, slope, isLaunch);
+    prcSystem.decideDeployment(current_altitude, slope, isLaunch);
     myServo.setServoAngle(isLaunch);
 
     File dataFile = SD.open("/data.csv", FILE_APPEND);

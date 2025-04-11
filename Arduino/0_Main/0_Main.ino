@@ -20,7 +20,7 @@ SDDataManager sdManager;
 
 DataBuffer dataBuffer; // 創建數據緩存器物件
 
-ParachuteSystem parachuteSystem;  // 創建開傘系統物件
+ParachuteSystem prcSystem;  // 創建開傘系統物件
 
 // 定義延遲時間
 const TickType_t xFrequencyTask1 = pdMS_TO_TICKS(TASK_1_DELAY_MS);  // Task1: 10ms = 100Hz
@@ -93,7 +93,7 @@ void HighFreqTask(void *pvParameters) {
 
         // 判斷開傘
         bool s_sta[3];
-        parachuteSystem.decideDeployment(
+        prcSystem.decideDeployment(
             sensorData.altitude, sensorData.slope,
             s_sta, sensorData.chute1Failed, sensorData.chute2Failed
         );

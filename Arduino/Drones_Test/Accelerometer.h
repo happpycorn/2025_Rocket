@@ -2,9 +2,7 @@
 #define ACCELEROMETER_H
 
 #include <MPU9250_asukiaaa.h>
-
-#define SDA_PIN 21
-#define SCL_PIN 22
+#include "Config.h"
 
 class Accelerometer {
 public:

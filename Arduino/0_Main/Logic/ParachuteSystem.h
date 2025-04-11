@@ -31,9 +31,9 @@ private:
     bool D2_isSpare = false;
 
     float calculateSlope(float altitude);
-    float alt_buffer[ALT_BUFFER_SIZE] = {0};
+    float alt_buffer[BUFFER_SIZE] = {0};
     int buffer_idx = 0;
-    int buffer_size = ALT_BUFFER_SIZE;
+    int buffer_size = BUFFER_SIZE;
 
     bool isLaunchCondition(
         float slope, float alt,  // 當前狀態

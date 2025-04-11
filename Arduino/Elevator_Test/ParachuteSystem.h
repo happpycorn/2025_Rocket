@@ -11,11 +11,11 @@
 class ParachuteSystem {
 private:
     
-    float alt_buffer[ALT_BUFFER_SIZE] = {0};
-    float slope_buffer[ALT_BUFFER_SIZE] = {0};
-    float time_buffer[ALT_BUFFER_SIZE] = {0};
+    float alt_buffer[BUFFER_SIZE] = {0};
+    float slope_buffer[BUFFER_SIZE] = {0};
+    float time_buffer[BUFFER_SIZE] = {0};
     int buffer_idx = 0;
-    int buffer_size = ALT_BUFFER_SIZE;
+    int buffer_size = BUFFER_SIZE;
     int valid_count = 0;
     bool isLaunch = false;
 
