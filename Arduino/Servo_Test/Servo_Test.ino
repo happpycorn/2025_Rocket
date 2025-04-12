@@ -1,6 +1,6 @@
 #include "ServoController.h"
 
-#define SERVO_PIN 25
+#define SERVO_PIN 32
 
 ServoController myServo(SERVO_PIN);
 
