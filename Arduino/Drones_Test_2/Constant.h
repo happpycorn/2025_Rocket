@@ -1,8 +1,17 @@
 #pragma once
 
+// For Acc
 #define SDA_PIN 21
 #define SCL_PIN 22
 
+// For GPS
+#define GPS_UART_CHANNEL 1
+#define GPS_RX_PIN 16
+#define GPS_TX_PIN 17
+#define GPS_BAUD 9600
+#define GPS_DATA_AGE_LIMIT 2000
+
+// For Quene
 #define QUEUE_LENGTH 200
 
 // 0~5 BMP*2, 6~8 Slope, 9~19 Acc, 20~21 Hgyro

@@ -10,7 +10,7 @@ private:
 
 public:
     void createQueue();  // 創建 Queue 方法
-    void saveData(SensorData data);
-    bool getData(TotalData& data);
+    void saveData(const HFreqSensorData& data);
+    bool getData(float f_data[], bool b_data[]);
 
 };

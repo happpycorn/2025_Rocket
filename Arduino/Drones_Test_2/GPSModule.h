@@ -1,14 +1,9 @@
 #pragma once
 
+#include <math.h>  // for NAN
 #include <TinyGPS++.h>
 #include <HardwareSerial.h>
-#include <math.h>  // for NAN
-
-#define GPS_UART_CHANNEL 1
-#define GPS_RX_PIN 16
-#define GPS_TX_PIN 17
-#define GPS_BAUD 9600
-#define GPS_DATA_AGE_LIMIT 2000
+#include "Constant.h"
 
 class GPSModule{
 private:
