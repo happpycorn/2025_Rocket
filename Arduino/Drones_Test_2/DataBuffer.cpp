@@ -51,5 +51,5 @@ bool DataBuffer::getData(float f_data[], bool b_data[]) {
 }
 
 void DataBuffer::createQueue() {
-    dataQueue = xQueueCreate(queueLength, sizeof(HFreqSensorData));
+    dataQueue = xQueueCreate(QUEUE_LENGTH, sizeof(HFreqSensorData));
 }
