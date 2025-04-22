@@ -1,14 +1,14 @@
 #pragma once
 
 #include <math.h>  // for NAN
-#include <TinyGPS++.h>
+#include <TinyGPSPlus.h>
 #include <HardwareSerial.h>
 #include "Constant.h"
 
 class GPSModule{
 private:
     TinyGPSPlus gps;
-    HardwareSerial& serial;
+    HardwareSerial serial;
     int data_addr;
 
 public:

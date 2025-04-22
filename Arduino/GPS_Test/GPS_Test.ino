@@ -1,35 +1,48 @@
+#include <Arduino.h>
 #include "GPSModule.h"
 
-// 使用 ESP32 的 UART2 (GPIO 16 = RX, GPIO 17 = TX)
-#define GPS_RX_PIN 16
-#define GPS_TX_PIN 17
-#define GPS_BAUD 9600
+GPSModule gps(0); // data_addr = 0
 
-// 初始化 GPS 數據
-GPSData gps_d = {0};
+double d_data[2];    // [lat, lng]
+float f_data[14];   // 假設總共你有 100 個 float 資料槽，GPS 占用從 0 開始的 14 個
 
-GPSModule gpsModule(GPS_BAUD, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
-
-// 設置 ESP32
 void setup() {
-    Serial.begin(115200);
-    gpsModule.begin();
-    Serial.println("🚀 GPS 初始化完成...");
+  Serial.begin(115200);
+  while (!Serial);
+
+  if (gps.begin()) {
+    Serial.println("GPS 初始化完成！");
+  } else {
+    Serial.println("GPS 初始化失敗！");
+  }
 }
 
-// 主循環
 void loop() {
-    gpsModule.readGPS(&gps_d);
+  static unsigned long lastPrint = 0;
+  if (millis() - lastPrint >= 1000) {  // 每秒列印一次
+    lastPrint = millis();
 
-    // 打印 GPS 數據
-    Serial.printf("📍 經緯度: %.6f, %.6f\n", gps_d.latitude, gps_d.longitude);
-    Serial.printf("🛰 衛星數: %d (可見: %d)\n", gps_d.numSatellites, gps_d.numVisibleSat);
-    Serial.printf("📏 高度: %.2f m (大地水準面: %.2f m)\n", gps_d.altitude, gps_d.geoidSeparation);
-    Serial.printf("🚀 地面速度: %.2f m/s\n", gps_d.groundSpeed);
-    Serial.printf("🧭 航向: %.2f°\n", gps_d.heading);
-    Serial.printf("📊 HDOP: %.2f, PDOP: %.2f\n", gps_d.hdop, gps_d.pdop);
-    Serial.printf("📡 訊號強度: %d\n", gps_d.signalQuality);
-    Serial.printf("⏰ UTC 時間: %06d\n", gps_d.utcTime);
-    
-    delay(1000);  // 1Hz 更新
+    if (gps.getData(d_data, f_data)) {
+      Serial.println("✅ GPS 資料有效");
+      Serial.print("Lat: "); Serial.println(d_data[0], 6);
+      Serial.print("Lng: "); Serial.println(d_data[1], 6);
+
+      Serial.print("Altitude: "); Serial.print(f_data[0]); Serial.println(" m");
+      Serial.print("Speed: "); Serial.print(f_data[1]); Serial.println(" km/h");
+      Serial.print("Course: "); Serial.print(f_data[2]); Serial.println(" deg");
+
+      Serial.print("Time: ");
+      Serial.printf("%02.0f:%02.0f:%02.0f\n", f_data[3], f_data[4], f_data[5]);
+
+      Serial.print("Date: ");
+      Serial.printf("%02.0f/%02.0f/%04.0f\n", f_data[6], f_data[7], f_data[8]);
+
+      Serial.print("HDOP: "); Serial.println(f_data[9]);
+      Serial.print("Satellites: "); Serial.println(f_data[10]);
+    } else {
+      Serial.println("⚠️ GPS 資料無效或過時");
+    }
+
+    Serial.println("-----------");
+  }
 }

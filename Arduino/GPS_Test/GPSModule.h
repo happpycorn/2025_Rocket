@@ -1,51 +1,23 @@
-#ifndef GPSMODULE_H
-#define GPSMODULE_H
+#pragma once
 
+#include <math.h>  // for NAN
+#include <TinyGPSPlus.h>
 #include <HardwareSerial.h>
 
-struct GPSData {
-    // 位置資訊
-    double latitude;      // 緯度 (°)
-    double longitude;     // 經度 (°)
-    float altitude;       // 高度（相對海平面, m）
-    float geoidSeparation; // 大地水準面高度 (m)
+#define GPS_UART_CHANNEL 2        // UART2
+#define GPS_RX_PIN 16             // RX pin (根據你的接法調整)
+#define GPS_TX_PIN 17             // TX pin (根據你的接法調整)
+#define GPS_BAUD 9600             // GPS 預設的 Baudrate
+#define GPS_DATA_AGE_LIMIT 2000   // 允許資料的最大時間（ms）
 
-    // 時間資訊
-    uint32_t utcTime;     // UTC 時間（毫秒級）
-
-    // 速度與運動方向
-    float groundSpeed;    // 地面速度 (m/s)
-    float heading;        // 航向角 (°)
-
-    // 衛星訊號品質
-    uint8_t numSatellites; // 已連接衛星數
-    uint8_t numVisibleSat; // 可見衛星數
-    uint8_t signalQuality; // 訊號強度
-
-    // 精度指標
-    float hdop;           // 水平精度指標 (HDOP)
-    float pdop;           // 3D 位置精度指標 (PDOP)
-};
-
-class GPSModule {
+class GPSModule{
 private:
-
-    void parseNMEA(String nmea, GPSData* gps);
-
-    int baundrate;          // 設定串口速率（bps）
-    SerialConfig module;   // 設定串口類型（UART/RS485）
-    int rxp;              // RX 端口
-    int txp;              // TX 端口
-
-    HardwareSerial gpsSerial;
+    TinyGPSPlus gps;
+    HardwareSerial serial;
+    int data_addr;
 
 public:
-
-    GPSModule(int baud, SerialConfig module, int rxp, int txp) 
-        : baundrate(baud), module(module), rxp(rxp), txp(txp), gpsSerial(2) {};
-
+    GPSModule(int addr);
     bool begin();
-    void readGPS(GPSData* gps);
+    bool getData(double d_data[], float f_data[]);
 };
-
-#endif // GPS_MODULE_H

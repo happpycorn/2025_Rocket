@@ -2,7 +2,7 @@
 
 bool BMPController::begin() {
 
-    if (!bmp.begin_I2C(i2cAddress)) {  // 初始化 BMP280
+    if (!bmp.begin_I2C(iicAddr)) {  // 初始化 BMP280
         return false;
     }
 

@@ -21,6 +21,12 @@
 // For SD_cards
 #define SD_CS_PIN 5
 
+// For LoRa
+#define LORA_UART_CHANNEL 1
+#define LORA_RX_PIN 14
+#define LORA_TX_PIN 13
+#define LORA_BAUD 9600
+
 // For Quene
 #define QUEUE_LENGTH 200
 
@@ -43,12 +49,14 @@ typedef struct {
     bool b[HF_BOOL_DATA_LEN];
 } HFreqSensorData;
 
-// 0~21 HFData, 22~35 GPS
-#define LF_FLOAT_DATA_LEN HF_FLOAT_DATA_LEN+14
+// 0~21 HFData, 22~32 GPS
+#define LF_FLOAT_DATA_LEN HF_FLOAT_DATA_LEN+11
 #define GPS_DATA_ADDR HF_FLOAT_DATA_LEN
 
-// 0~8 HFData
-#define LF_BOOL_DATA_LEN HF_BOOL_DATA_LEN
+// 0~8 HFData, 9 isHFData, 10 GPS
+#define LF_BOOL_DATA_LEN HF_BOOL_DATA_LEN+2
+#define IS_HFD_ADDR HF_BOOL_DATA_LEN+0
+#define IS_GPS_ADDR HF_BOOL_DATA_LEN+1
 
 // 0~1 GPS
 #define LF_DOUBLE_DATA_LEN 2

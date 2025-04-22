@@ -9,7 +9,7 @@ bool GPSModule::begin() {
 }
 
 bool GPSModule::getData(double d_data[], float f_data[]) {
-    while (mySerial.available() > 0) {
+    while (serial.available() > 0) {
         gps.encode(serial.read());
     }
 
@@ -37,11 +37,7 @@ bool GPSModule::getData(double d_data[], float f_data[]) {
     f_data[data_addr+8] = gps.date.year();
 
     f_data[data_addr+9] = gps.hdop.hdop();
-    f_data[data_addr+10] = gps.pdop.value();
-
-    f_data[data_addr+11] = gps.satellites.value();
-    f_data[data_addr+12] = gps.satellites.hdop();
-    f_data[data_addr+13] = gps.geoidSeparation.meters();
+    f_data[data_addr+10] = gps.satellites.value();
         
     return true;
 }

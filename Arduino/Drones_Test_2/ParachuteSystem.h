@@ -6,11 +6,11 @@
 class ParachuteSystem {
 private:
     
-    float alt_buffer[BUFFER_SIZE] = {0};
-    float slope_buffer[BUFFER_SIZE] = {0};
-    float time_buffer[BUFFER_SIZE] = {0};
+    float alt_buffer[PRC_BUFFER_SIZE] = {0};
+    float slope_buffer[PRC_BUFFER_SIZE] = {0};
+    float time_buffer[PRC_BUFFER_SIZE] = {0};
     int buffer_idx = 0;
-    int buffer_size = BUFFER_SIZE;
+    int buffer_size = PRC_BUFFER_SIZE;
     bool isLaunch = false;
 
 public:
