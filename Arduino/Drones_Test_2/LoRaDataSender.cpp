@@ -9,6 +9,8 @@ bool LoRaDataSender::begin() {
 
 void LoRaDataSender::sendData(float f_data[], bool b_data[], double d_data[]) {
     pack_count++;
+    serial.print("<START>,");
+    serial.print(pack_count); serial.print(",");
     for (int i = 0; i < LF_FLOAT_DATA_LEN; i++) {
         serial.print(f_data[i]); serial.print(",");
     }
@@ -18,7 +20,7 @@ void LoRaDataSender::sendData(float f_data[], bool b_data[], double d_data[]) {
     for (int i = 0; i < LF_DOUBLE_DATA_LEN; i++) {
         serial.print(d_data[i]); serial.print(",");
     }
-    serial.println(pack_count);
+    serial.println("<END>");
 }
 
 void LoRaDataSender::println(String content) {

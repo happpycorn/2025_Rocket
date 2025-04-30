@@ -8,7 +8,7 @@ bool DataBuffer::getData(float f_data[], bool b_data[]) {
 
     if (uxQueueMessagesWaiting(dataQueue) == 0) {
         for (int i = 0; i < HF_FLOAT_DATA_LEN; i++) { f_data[i] = 0.0; }
-        for (int i = 0; i < HF_BOOL_DATA_LEN; i++) { b_data[i] = 0.0; }
+        for (int i = 0; i < HF_BOOL_DATA_LEN; i++) { b_data[i] = false; }
 
         return false;
     }
@@ -16,8 +16,12 @@ bool DataBuffer::getData(float f_data[], bool b_data[]) {
     HFreqSensorData dataBuffer[QUEUE_LENGTH];
     int count = 0;
 
-    while (count < QUEUE_LENGTH && xQueueReceive(dataQueue, &dataBuffer[count], portMAX_DELAY) == pdPASS) {
-        count++;
+    while (count < QUEUE_LENGTH) {
+        if (xQueueReceive(dataQueue, &dataBuffer[count], 0) == pdPASS) {
+            count++;
+        } else {
+            break;  // queue 是空的就退出
+        }
     }
 
     // 初始化累加器

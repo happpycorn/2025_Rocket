@@ -64,7 +64,7 @@ void LowFreqTask(void *pvParameters) {
         lora.sendData(data.f, data.b, data.d);
 
         sd.saveData(data);
-
+        // Serial.println("LowFreqTask running...");
         vTaskDelayUntil(&xLastWakeTime, xFrequencyTask2);
     }
 }
@@ -96,6 +96,8 @@ void setup() {
         Serial.println("SD Card Init Fail.");
         while (1);
     }
+
+    buffer.createQueue();
     
     // Fill Slope Data
     lora.println("Filling Slope Data...");
@@ -115,8 +117,8 @@ void setup() {
     lora.println("Start!");
     Serial.println("Start!");
 
-    xTaskCreatePinnedToCore(HighFreqTask, "HighFreqTask", 4096, NULL, 2, NULL, 0);
-    xTaskCreatePinnedToCore(LowFreqTask, "LowFreqTask", 4096, NULL, 1, NULL, 1);
+    xTaskCreatePinnedToCore(HighFreqTask, "HighFreqTask", 12288, NULL, 2, NULL, 0);
+    xTaskCreatePinnedToCore(LowFreqTask, "LowFreqTask", 12288, NULL, 1, NULL, 1);
 }
 
-void loop() {}
+void loop() {vTaskDelete(NULL);}

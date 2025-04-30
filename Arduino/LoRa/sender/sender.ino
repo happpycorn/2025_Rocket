@@ -19,7 +19,7 @@ void loop() {
 
         // 準備資料
         char buffer[20];
-        sprintf(buffer, "ID:%u", packetID++);
+        sprintf(buffer, "%u", packetID++);
 
         // 傳送資料
         LoRa.println(buffer);
