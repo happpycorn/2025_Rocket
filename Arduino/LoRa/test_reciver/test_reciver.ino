@@ -22,7 +22,7 @@ void setup() {
 
     // 建立 CSV 並寫入標題列
     if (!SD.exists("/data.csv")) {
-        dataFile = SD.open("/data.csv", FILE_WRITE);
+        dataFile = SD.open("/data.csv", FILE_APPEND);
         if (dataFile) {
             dataFile.println("Timestamp(ms),Interval(ms),RawData,ParsedInt");
             dataFile.close();
@@ -56,11 +56,9 @@ void loop() {
         Serial.println(" ms");
         Serial.print("Received: ");
         Serial.println(received);
-        Serial.print("Parsed Int: ");
-        Serial.println(parsedValue);
 
         // 寫入 SD 卡 CSV
-        dataFile = SD.open("/data.csv", FILE_WRITE);
+        dataFile = SD.open("/data.csv", FILE_APPEND);
         if (dataFile) {
             dataFile.print(now); dataFile.print(",");
             dataFile.print(delta); dataFile.print(",");
