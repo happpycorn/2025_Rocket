@@ -11,7 +11,11 @@ SDDataManager sd;
 DataBuffer buffer;
 GPSModule gps(GPS_DATA_ADDR);
 LoRaDataSender lora;
-ServoController myServo(SERVO_PIN);
+ServoController servos[SERVO_COUNT] = {
+    ServoController(SERVO_PIN_1),
+    ServoController(SERVO_PIN_2),
+    ServoController(SERVO_PIN_3)
+};
 ParachuteSystem prc;
 
 const TickType_t xFrequencyTask1 = pdMS_TO_TICKS(TASK_1_DELAY_MS);
@@ -38,12 +42,17 @@ void HighFreqTask(void *pvParameters) {
         prc.calculateSlope(now, data.f[SLOPE_DATA_ADDR+0], data.f);
 
         // 決定開傘
-        bool isLaunch;
         prc.decideDeployment(
-            data.f[SLOPE_DATA_ADDR+0], data.f[SLOPE_DATA_ADDR+1], isLaunch
-        );
+            data.f[SLOPE_DATA_ADDR+0], data.f[SLOPE_DATA_ADDR+1], 
+            data.f[SLOPE_DATA_ADDR+2], data.b
+        )
 
-        myServo.setServoAngle(isLaunch);
+        // 如果狀態改變，設定伺服器角度
+        for (int i = 0; i < SERVO_COUNT; i++) {
+            if (data.b[SERVO_DATA_ADDR+i] != servos[i].isOpen) {
+                servos[i].setServoAngle(data.b[SERVO_DATA_ADDR+i]);
+            }
+        }
 
         // 儲存資料
         buffer.saveData(data);
@@ -96,6 +105,8 @@ void setup() {
         Serial.println("SD Card Init Fail.");
         while (1);
     }
+
+    for (int i = 0; i < SERVO_COUNT; i++) { servos[i].begin(); }
 
     buffer.createQueue();
     

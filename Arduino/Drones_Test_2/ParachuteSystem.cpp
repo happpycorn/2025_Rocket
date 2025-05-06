@@ -30,19 +30,70 @@ void ParachuteSystem::fillSpace(unsigned long long time, float altitude) {
     buffer_idx = (buffer_idx+1)%buffer_size;
 }
 
-
 void ParachuteSystem::decideDeployment(
-    float altitude, float slope, 
-    bool &deployedState
+    float altitude, float slope, float sub_slope,
+    bool deployedState[]
 ) {
-    if (!isLaunch) {
-        bool isSlopeValid = slope < LAUNCH_SLOPE;
-        bool isAltitudeValid = (LAUNCH_UPPER_BOUND > altitude) && (altitude > LAUNCH_BELOW_BOUND);
-        if (isSlopeValid&&isAltitudeValid) {
-            isLaunch = true;
+
+    // 傘 1 開啟判斷
+    if (!chuteDeployed[0]) {
+        // 開傘條件 1 判斷
+        if (isLaunchCondition(
+            altitude, slope, LAUNCH_1_UPPER_BOUND
+        )) {
+            // 開啟傘 1
+            chuteDeployed[0] = true;
+            lastDeployTime = xTaskGetTickCount();
+            maxSubSlope = 0;
+        }
+    // 傘 2 開啟判斷
+    } else if (!chuteDeployed[1]) {
+        // 傘 1 失效判斷
+        if (isFailed(sub_slope)) {
+            // 開啟傘 2，並設為備用
+            chuteDeployed[1] = true;
+            isChute1Failed = true;
+            lastDeployTime = xTaskGetTickCount();
+            maxSubSlope = 0;
+        // 開傘條件 2 判斷
+        } else if (isLaunchCondition(
+            altitude, slope, LAUNCH_2_UPPER_BOUND
+        )) {
+            // 開啟傘 2
+            chuteDeployed[1] = true;
+            lastDeployTime = xTaskGetTickCount();
+            maxSubSlope = 0;
+        }
+    // 傘 3 開啟判斷
+    } else if (!chuteDeployed[2]) {
+        // 傘 2 備用判斷
+        if (isChute1Failed) {
+            // 傘 2 (備用)失效判斷
+            if (isFailed(sub_slope)) {
+                // 開啟傘 3
+                chuteDeployed[2] = true;
+                isChute2Failed = true;
+            // 開傘條件 2 判斷
+            } else if (isLaunchCondition(
+                altitude, slope, LAUNCH_2_UPPER_BOUND
+            )) {
+                // 開啟傘 3
+                chuteDeployed[2] = true;
+            }
+        // 傘 2 失效判斷
+        } else if (isFailed(sub_slope)) {
+            // 開啟傘 3
+            chuteDeployed[2] = true;
+            isChute2Failed = true;
         }
     }
-    deployedState = isLaunch;
+
+    for (int i = 0; i < 3; i++) {
+        deployedState[SERVO_DATA_ADDR+i] = chuteDeployed[i];
+    }
+
+    deployedState[FAIL_DATA_ADDR+0] = isChute1Failed;
+    deployedState[FAIL_DATA_ADDR+1] = isChute2Failed;
 }
 
 void ParachuteSystem::calculateSlope(
@@ -106,4 +157,24 @@ void ParachuteSystem::calculateSlope(
 float ParachuteSystem::calculateAveAlt(bool b1, bool b2, float a1, float a2) {
     int validCount = b1 + b2;
     return validCount ? (a1*b1+a2*b2)/validCount : NAN;
+}
+
+bool ParachuteSystem::isLaunchCondition(float altitude, float slope, float upperBound) {
+    bool isSlopeValid = slope < LAUNCH_SLOPE;
+    bool isAltitudeValid = (upperBound > alt) && (alt > LAUNCH_BELOW_BOUND);
+    return isSlopeValid && isAltitudeValid;
+}
+
+bool ParachuteSystem::isFailed(float sub_slope) {
+    maxSubSlope = (sub_slope > maxSubSlope) ? sub_slope : maxSubSlope
+
+    TickType_t currentTime = xTaskGetTickCount();
+    TickType_t elapsedTime = currentTime - lastDeployTime;
+    if (elapsedTime < deployDelayTicks) {
+        return false;
+    } else if (maxSubSlope > UNFAIL_SUB_SLOPE) {
+        return false;
+    } else {
+        return true;
+    }
 }

@@ -11,7 +11,14 @@ private:
     float time_buffer[PRC_BUFFER_SIZE] = {0};
     int buffer_idx = 0;
     int buffer_size = PRC_BUFFER_SIZE;
-    bool isLaunch = false;
+
+    bool chuteDeployed[3] = {false, false, false};
+    bool isChute1Failed = false;
+    bool isChute2Failed = false;
+
+    TickType_t lastDeployTime;
+    const TickType_t deployDelayTicks = pdMS_TO_TICKS(DEPLOY_DELAY);
+    float maxSubSlope = 0;
 
 public:
 
@@ -24,9 +31,13 @@ public:
     );
 
     void decideDeployment(
-        float altitude, float slope, 
-        bool &deployedState
+        float altitude, float slope, float sub_slope,
+        bool deployedState[]
     );
+
+    bool isLaunchCondition(float altitude, float slope, float upperBound);
+
+    bool isFailed(float sub_slope);
 };
 
 #endif // PARACHUTE_SYSTEM_H
