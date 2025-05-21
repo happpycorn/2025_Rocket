@@ -7,16 +7,17 @@ HFreqSensor* hfSensor[HFREQ_SENSOR_COUNT] = {
     new Hygrometer(HGYRP_DATA_ADDR)
 };
 
-SDDataManager sd;
-DataBuffer buffer;
-GPSModule gps(GPS_DATA_ADDR);
-LoRaDataSender lora;
 ServoController servos[SERVO_COUNT] = {
     ServoController(SERVO_PIN_1),
     ServoController(SERVO_PIN_2),
     ServoController(SERVO_PIN_3)
 };
+
+SDDataManager sd;
+DataBuffer buffer;
+LoRaDataSender lora;
 ParachuteSystem prc;
+GPSModule gps(GPS_DATA_ADDR);
 
 const TickType_t xFrequencyTask1 = pdMS_TO_TICKS(TASK_1_DELAY_MS);
 const TickType_t xFrequencyTask2 = pdMS_TO_TICKS(TASK_2_DELAY_MS);
@@ -38,14 +39,8 @@ void HighFreqTask(void *pvParameters) {
             data.f[BMP_DATA_ADDR_1+2], data.f[BMP_DATA_ADDR_2+2]
         );
 
-        unsigned long long now = millis();
-        prc.calculateSlope(now, data.f[SLOPE_DATA_ADDR+0], data.f);
-
-        // 決定開傘
-        prc.decideDeployment(
-            data.f[SLOPE_DATA_ADDR+0], data.f[SLOPE_DATA_ADDR+1], 
-            data.f[SLOPE_DATA_ADDR+2], data.b
-        )
+        unsigned long long now = (unsigned long long)pdTICKS_TO_MS(xTaskGetTickCount());
+        prc.decideDeployment(now, data.f, data.b);
 
         // 如果狀態改變，設定伺服器角度
         for (int i = 0; i < SERVO_COUNT; i++) {

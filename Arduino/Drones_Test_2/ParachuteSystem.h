@@ -1,14 +1,14 @@
-#ifndef PARACHUTE_SYSTEM_H
-#define PARACHUTE_SYSTEM_H
+#pragma once
 
 #include "Config.h"
+#include "Constant.h"
 
 class ParachuteSystem {
 private:
     
+    float time_buffer[PRC_BUFFER_SIZE] = {0};
     float alt_buffer[PRC_BUFFER_SIZE] = {0};
     float slope_buffer[PRC_BUFFER_SIZE] = {0};
-    float time_buffer[PRC_BUFFER_SIZE] = {0};
     int buffer_idx = 0;
     int buffer_size = PRC_BUFFER_SIZE;
 
@@ -16,28 +16,25 @@ private:
     bool isChute1Failed = false;
     bool isChute2Failed = false;
 
-    TickType_t lastDeployTime;
-    const TickType_t deployDelayTicks = pdMS_TO_TICKS(DEPLOY_DELAY);
+    unsigned long long lastDeployTime;
     float maxSubSlope = 0;
+
+    bool isLaunchCondition(const float altitude, const float slope, const float upperBound);
+
+    bool isFailed(const unsigned long long time, const float sub_slope);
+
+    void calculateSlope(
+        const unsigned long long time, const float altitude, float data[]
+    );
 
 public:
 
-    void fillSpace(unsigned long long time, float altitude);
+    void fillSpace(const unsigned long long time, const float altitude);
 
-    float calculateAveAlt(bool b1, bool b2, float a1, float a2);
-
-    void calculateSlope(
-        unsigned long long time, float altitude, float data[]
-    );
+    float calculateAveAlt(const bool b1, const bool b2, const float a1, const float a2);
 
     void decideDeployment(
-        float altitude, float slope, float sub_slope,
-        bool deployedState[]
+        const unsigned long long time,
+        float array_f[], bool array_b[]
     );
-
-    bool isLaunchCondition(float altitude, float slope, float upperBound);
-
-    bool isFailed(float sub_slope);
 };
-
-#endif // PARACHUTE_SYSTEM_H

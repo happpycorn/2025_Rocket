@@ -9,6 +9,7 @@ void ServoController::begin() {
 }
 
 void ServoController::setServoAngle(bool newState) {
+    isOpen = newState;
     int angle = newState ? angleOn : angleOff;
     servo.write(angle);
 }

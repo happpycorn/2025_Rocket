@@ -10,6 +10,8 @@ public:
     void begin();
     void setServoAngle(bool newState);
 
+    bool isOpen;
+
 private:
 
     Servo servo;
