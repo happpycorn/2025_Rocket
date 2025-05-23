@@ -101,6 +101,8 @@ void setup() {
         while (1);
     }
 
+    gps.begin();
+
     for (int i = 0; i < SERVO_COUNT; i++) { servos[i].begin(); }
 
     buffer.createQueue();
