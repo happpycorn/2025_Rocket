@@ -12,10 +12,6 @@
 #define SERVO_PIN_3 32
 
 #include "Constant.h"
-#include "DataBuffer.h"
 #include "GPSModule.h"
-#include "HFreqSensor.h"
-#include "ServoController.h"
 #include "SDDataManager.h"
 #include "LoRaDataSender.h"
-#include "ParachuteSystem.h"

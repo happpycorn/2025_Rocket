@@ -61,7 +61,6 @@ typedef struct {
 // 0~1 GPS
 #define LF_DOUBLE_DATA_LEN 2
 
-#pragma pack(1)
 typedef struct {
     float f[LF_FLOAT_DATA_LEN];
     bool b[LF_BOOL_DATA_LEN];

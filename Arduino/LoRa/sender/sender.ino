@@ -10,7 +10,7 @@ uint16_t packetID = 0;
 
 void setup() {
     Serial.begin(115200);      // Debug 輸出
-    LoRa.begin(9600, SERIAL_8N1, 14, 13);
+    LoRa.begin(9600, SERIAL_8N1, 13, 14);
 }
 
 void loop() {
