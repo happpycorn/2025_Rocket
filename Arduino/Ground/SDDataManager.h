@@ -7,5 +7,5 @@
 class SDDataManager {
 public:
     bool begin();
-    bool saveData(const LFreqData &data);
+    bool saveData(const RecordData &data);
 };

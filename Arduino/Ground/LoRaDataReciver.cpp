@@ -7,11 +7,11 @@ bool LoRaDataReciver::begin() {
     return true;
 }
 
-void LoRaDataReciver::reciveData() {
+LoRaDataReciver::Result LoRaDataReciver::reciveData() {
     Result result;
 
-    while (LORA_SERIAL.available()) {
-        uint8_t b = LORA_SERIAL.read();
+    while (serial.available()) {
+        uint8_t b = serial.read();
 
         switch (state) {
                 
@@ -58,13 +58,14 @@ void LoRaDataReciver::reciveData() {
     return result;
 }
 
-ReciveData LoRaDataReciver::decode(uint8_t code[], uint8_t check_code) {
+LoRaDataReciver::ReciveData LoRaDataReciver::decode(uint8_t code[], uint8_t check_code) {
     ReciveData data;
 
     uint8_t checksum = 0;
     for (int i = 0; i < index; i++) checksum ^= buffer[i];
 
     if (checksum != check_code) {
+        data.is_data = false;
         return data;
     }
 
@@ -94,5 +95,6 @@ ReciveData LoRaDataReciver::decode(uint8_t code[], uint8_t check_code) {
         index += sizeof(double);
     }
 
+    data.is_data = true;
     return data;
 }

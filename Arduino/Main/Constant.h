@@ -26,6 +26,8 @@
 #define LORA_RX_PIN 14
 #define LORA_TX_PIN 13
 #define LORA_BAUD 9600
+#define HEADER1 0xAA
+#define HEADER2 0x55
 
 // For Quene
 #define QUEUE_LENGTH 200

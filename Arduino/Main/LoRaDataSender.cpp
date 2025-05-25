@@ -49,16 +49,16 @@ void LoRaDataSender::sendData(float f_data[], bool b_data[], double d_data[]) {
     }
     buffer[index++] = checksum;
 
-    serial.write(0xAA);
-    serial.write(0x55);
+    serial.write(HEADER1);
+    serial.write(HEADER2);
     serial.write(0x01);
 
     serial.write(buffer, index);
 }
 
 void LoRaDataSender::println(String content) {
-    serial.write(0xAA);
-    serial.write(0x55);
+    serial.write(HEADER1);
+    serial.write(HEADER2);
     serial.write(0x02);
     serial.println(content);
 }
