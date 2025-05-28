@@ -2,7 +2,7 @@
 
 SDDataManager sdManager;
 
-TotalData generateTestData();
+RecordData generateTestData();
 
 void setup() {
     Serial.begin(115200);
@@ -19,7 +19,7 @@ void setup() {
     }
     Serial.println("SD 卡初始化成功!");
 
-    TotalData totaldata = generateTestData();
+    RecordData totaldata = generateTestData();
 
     if (sdManager.saveData(totaldata)) {
         Serial.println("SD 卡寫入成功!");
@@ -33,16 +33,16 @@ void loop() {
 }
 
 // **靜態測試數據**
-TotalData generateTestData() {
-    TotalData data;
+RecordData generateTestData() {
+    RecordData data;
 
-    save_data.time = data.time;
-    save_data.last_recive_time = data.last_recive_time;
-    save_data.recive_pack_count = data.recive_pack_count;
+    data.time = 2000;
+    data.last_recive_time = 1000;
+    data.recive_pack_count = 10;
 
-    for (int i = 0; i < FLOAT_DATA_LEN; i++) save_data.f[i] = data.f[i];
-    for (int i = 0; i < BOOL_DATA_LEN; i++) save_data.b[i] = data.b[i];
-    for (int i = 0; i < DOUBLE_DATA_LEN; i++) save_data.d[i] = data.d[i];
+    for (int i = 0; i < FLOAT_DATA_LEN; i++) data.f[i] = 0;
+    for (int i = 0; i < BOOL_DATA_LEN; i++) data.b[i] = 0;
+    for (int i = 0; i < DOUBLE_DATA_LEN; i++) data.d[i] = 0;
 
     return data;
 }

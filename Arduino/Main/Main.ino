@@ -69,6 +69,8 @@ void LowFreqTask(void *pvParameters) {
 
         sd.saveData(data);
         // Serial.println("LowFreqTask running...");
+        Serial.println(lora.pack_count);
+
         vTaskDelayUntil(&xLastWakeTime, xFrequencyTask2);
     }
 }
