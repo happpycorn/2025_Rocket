@@ -1,0 +1,18 @@
+body {
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+h2 {
+  margin-top: 30px;
+}
+
+.array-container {
+  margin-bottom: 20px;
+}
+
+.array-container pre {
+  background: #eee;
+  padding: 10px;
+  border-radius: 6px;
+}

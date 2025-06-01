@@ -2,7 +2,7 @@
 #include <SPI.h>
 #include <ParachuteSystem.h>
 
-ParachuteSystem parachuteSystem; 
+ParachuteSystem prcSystem; 
 
 // 定義常數
 const int SD_CS_PIN = 5;               // SD 卡的 Chip Select 引腳
@@ -74,7 +74,7 @@ void setup() {
         float s;
         bool deployedState[3], c1f, c2f;
 
-        parachuteSystem.decideDeployment(
+        prcSystem.decideDeployment(
             input, s, deployedState, 
             c1f, c2f
         );  // 調用插件

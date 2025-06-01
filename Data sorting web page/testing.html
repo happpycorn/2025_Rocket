@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rocket Status Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>data sorting page preview (temp.)</header>
+
+    <div class="main-content">
+      <!-- Left Panel: Current Status -->
+      <section class="status-panel">
+        <h2>current status</h2>
+        <div class="status-group green">
+          <p>height : xxxx</p>
+          <p>vertical velocity : xxxx</p>
+          <p>vertical acceleration : xxxx</p>
+        </div>
+        <hr />
+        <div class="status-group blue">
+          <p>servo condition : xxxx</p>
+          <p>parachute condition : xxxx</p>
+          <p>sensor condition : xxxx</p>
+        </div>
+        <hr />
+        <div class="status-group orange">
+          <p>lora-receiving time : xxxx</p>
+          <p>lora-delayed time : xxxx</p>
+          <p>lora-activated time : xxxx</p>
+        </div>
+      </section>
+
+      <!-- Middle Panel: Warning Alert -->
+      <section class="alert-panel">
+        <h2>warning alert</h2>
+        <div class="alert-box">
+          <p>All seems to be normal !<br>and I’ll keeping hoping so...</p>
+        </div>
+      </section>
+
+      <!-- Right Panel: Rocket's Location -->
+      <section class="map-panel">
+        <h2>Rocket’s location</h2>
+        <div class="map-image">
+          <img src="https://i.imgur.com/0KFBHTB.png" alt="Rocket Map">
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

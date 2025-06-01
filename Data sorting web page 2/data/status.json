@@ -1,0 +1,11 @@
+[
+  { "label": "height", "value": 1234, "color": "#009688" },
+  { "label": "vertical velocity", "value": 30, "color": "#009688" },
+  { "label": "vertical acceleration", "value": 40, "color": "#009688" },
+  { "label": "servo condition", "value": "ok", "color": "#1E3A8A" },
+  { "label": "parachute condition", "value": "ok", "color": "#1E3A8A" },
+  { "label": "sensor condition", "value": "ok", "color": "#1E3A8A" },
+  { "label": "lora-receiving time", "value": "12:01", "color": "#fb8c00" },
+  { "label": "lora-delayed time", "value": 2, "color": "#fb8c00" },
+  { "label": "lora-activated time", "value": "12:01:02", "color": "#fb8c00" }
+]

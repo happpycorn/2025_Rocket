@@ -14,7 +14,7 @@
         try {
           const jsonData = JSON.parse(text);
           processJSONData(jsonData);
-        } catch {
+        } catch { 
           resultDisplay.textContent = "Invalid JSON file.";
         }
       } else if (file.name.endsWith('.csv') || file.name.endsWith('.txt')) {
