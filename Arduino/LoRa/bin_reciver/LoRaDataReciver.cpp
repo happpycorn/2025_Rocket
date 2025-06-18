@@ -44,7 +44,8 @@ LoRaDataReciver::Result LoRaDataReciver::reciveData() {
             
             case 4:
                 buffer[index++] = b;
-                if (index == (int)len) state = 6;
+                if (index >= (int)len) state = 6;
+                break;
 
             case 5:  // 收完二進位封包 → 下一 byte 是 checksum
                 result.data = decode(buffer, b);
@@ -54,6 +55,7 @@ LoRaDataReciver::Result LoRaDataReciver::reciveData() {
             case 6:  // 收完文字訊息
                 buffer[index] = '\0';  // null 結尾
                 strcpy(result.message, (char*)buffer);
+                result.is_message = true;
                 state = 0;
                 return result;
         }
@@ -66,26 +68,29 @@ LoRaDataReciver::ReciveData LoRaDataReciver::decode(uint8_t code[], uint8_t chec
     ReciveData data;
 
     uint8_t checksum = 0;
-    for (int i = 0; i < index; i++) checksum ^= buffer[i];
+    for (int i = 0; i < BINARY_LENGTH; i++) checksum ^= code[i];
 
     if (checksum != check_code) {
         data.is_data = false;
+        Serial.print(checksum); Serial.println(check_code); 
         return data;
     }
 
+    int index = 0;
+
     // Package count
-    memcpy(&data.pack_count, &buffer[index], sizeof(int));
+    memcpy(&data.pack_count, &code[index], sizeof(int));
     index += sizeof(int);
 
     // Float
     for (int i = 0; i < RECIVE_FLOAT_DATA_LEN; i++) {
-        memcpy(&data.f[i], &buffer[index], sizeof(float));
+        memcpy(&data.f[i], &code[index], sizeof(float));
         index += sizeof(float);
     }
 
     // Bool
-    uint8_t boolByte1 = buffer[index++];
-    uint8_t boolByte2 = buffer[index++];
+    uint8_t boolByte1 = code[index++];
+    uint8_t boolByte2 = code[index++];
     for (int i = 0; i < 8; i++) {
         data.b[i] = (boolByte1 & (1 << i)) != 0;
     }
@@ -95,7 +100,7 @@ LoRaDataReciver::ReciveData LoRaDataReciver::decode(uint8_t code[], uint8_t chec
 
     // Double
     for (int i = 0; i < 2; i++) {
-        memcpy(&data.d[i], &buffer[index], sizeof(double));
+        memcpy(&data.d[i], &code[index], sizeof(double));
         index += sizeof(double);
     }
 

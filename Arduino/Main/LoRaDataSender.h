@@ -12,5 +12,5 @@ public:
     LoRaDataSender();
     bool begin();
     void sendData(float f_data[], bool b_data[], double d_data[]);
-    void println(String content);
+    void println(const String& content);
 };

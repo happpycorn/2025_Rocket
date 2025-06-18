@@ -10,14 +10,14 @@ bool LoRaDataSender::begin() {
 void LoRaDataSender::sendData(float f_data[], bool b_data[], double d_data[]) {
     
     // Empty Package
-    const int bufferSize = sizeof(pack_count) + 3 * sizeof(float) + 2 + 2 * sizeof(double) + 1;
+    const int bufferSize = sizeof(int) + 3 * sizeof(float) + 2 + 2 * sizeof(double);
     uint8_t buffer[bufferSize];
     int index = 0;
     
     // Package count
     pack_count++;
-    memcpy(&buffer[index], &pack_count, sizeof(pack_count));
-    index += sizeof(pack_count);
+    memcpy(&buffer[index], &pack_count, sizeof(int));
+    index += sizeof(int);
 
     // Slope 3
     for (int i = SLOPE_DATA_ADDR; i < SLOPE_DATA_ADDR + 3; i++) {
@@ -29,10 +29,13 @@ void LoRaDataSender::sendData(float f_data[], bool b_data[], double d_data[]) {
     uint8_t boolByte1 = 0, boolByte2 = 0;
     for (int i = 0; i < 8; i++) {
         if (b_data[i]) boolByte1 |= (1 << i);
+        Serial.print(b_data[i]);
     }
     for (int i = 8; i < LF_BOOL_DATA_LEN; i++) {
         if (b_data[i]) boolByte2 |= (1 << (i - 8));
+        Serial.print(b_data[i]);
     }
+    Serial.println();
     buffer[index++] = boolByte1;
     buffer[index++] = boolByte2;
 
@@ -44,21 +47,24 @@ void LoRaDataSender::sendData(float f_data[], bool b_data[], double d_data[]) {
 
     // Check sum
     uint8_t checksum = 0;
-    for (int i = 0; i < index; i++) {
+    for (int i = 0; i < bufferSize; i++) {
         checksum ^= buffer[i];
     }
-    buffer[index++] = checksum;
 
     serial.write(HEADER1);
     serial.write(HEADER2);
     serial.write(0x01);
 
     serial.write(buffer, index);
+    serial.write(checksum);
 }
 
-void LoRaDataSender::println(String content) {
+void LoRaDataSender::println(const String& content) {
+    uint8_t len = content.length();  // 限 255 字元
+
     serial.write(HEADER1);
     serial.write(HEADER2);
     serial.write(0x02);
-    serial.println(content);
+    serial.write(len);  // 字串長度
+    serial.write((const uint8_t*)content.c_str(), len);  // 傳文字內容
 }

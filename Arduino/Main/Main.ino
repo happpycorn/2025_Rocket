@@ -15,9 +15,9 @@ ServoController servos[SERVO_COUNT] = {
 
 SDDataManager sd;
 DataBuffer buffer;
-LoRaDataSender lora;
 ParachuteSystem prc;
 GPSModule gps(GPS_DATA_ADDR);
+LoRaDataSender lora;
 
 const TickType_t xFrequencyTask1 = pdMS_TO_TICKS(TASK_1_DELAY_MS);
 const TickType_t xFrequencyTask2 = pdMS_TO_TICKS(TASK_2_DELAY_MS);

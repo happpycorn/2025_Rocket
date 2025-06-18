@@ -10,11 +10,12 @@ public:
         float f[RECIVE_FLOAT_DATA_LEN];
         bool b[RECIVE_BOOL_DATA_LEN];
         double d[RECIVE_DOUBLE_DATA_LEN];
-        bool is_data;
+        bool is_data = false;
     };
     
     struct Result {
         char message[LORA_BUFFER_LEN];
+        bool is_message = false;
         ReciveData data;
     };
 
