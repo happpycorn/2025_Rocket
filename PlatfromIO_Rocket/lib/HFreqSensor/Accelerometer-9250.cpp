@@ -1,9 +1,10 @@
 #include "Accelerometer-9250.h"
 
 bool Accelerometer::begin() {
-    Wire.begin();  // SDA: GPIO21, SCL: GPIO22 (ESP32 預設)
 
-    if (!mpu.setup(0x68)) {
+    mpu.verbose(true);  // 顯示詳細初始化過程
+
+    if (!mpu.setup()) {
         return false;
     }
 

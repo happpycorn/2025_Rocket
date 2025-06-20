@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Rocket Monitor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="wrapper">
+        <!-- 左側：監控資訊 -->
+        <section class="monitor-panel">
+            <div id="bool_data_list" class="bool-data-list">
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label" id="Para_1">Para 1</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label" id="Para_2">Para 2</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label" id="Para_3">Para 3</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label" id="L1_Fail">L1 Fail</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label" id="L2_Fail">L2 Fail</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label" id="Ground_GPS">Ground GPS</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label" id="BMP_1">BMP 1</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label" id="BMP_2">BMP 2</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label" id="Acc">Acc</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label" id="Hgyro">Hgyro</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label" id="Hfreq_Data">Hfreq Data</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label" id="Flight_GPS">Flight GPS</div>
+                </div>
+            </div>
+
+            <div class="monitor-data-item">
+                <div class="monitor-item-l">
+                    <div class="monitor-item">
+                        <div class="label">最大高度</div>
+                        <div class="value" id="alt_max">--</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="label">現在高度</div>
+                        <div class="value" id="alt_now">--</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="label">垂直速度</div>
+                        <div class="value" id="ver">--</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="label">垂直加速度</div>
+                        <div class="value" id="acc">--</div>
+                    </div>
+                </div>
+                <div class="monitor-item-r">
+                    <div class="monitor-item">
+                        <div class="label">地面站運行時間</div>
+                        <div class="value" id="runtime">--</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="label">最新封包編號</div>
+                        <div class="value" id="packet_index">--</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="label">上次接收時間</div>
+                        <div class="value" id="receive_time">--</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="warning-panel">
+                <div class="section-title">警告訊息</div>
+                <!-- 警告訊息 -->
+            </div>
+        </section>
+
+        <!-- 右側：視覺化區塊 -->
+        <section class="visualization-panel">
+            <div class="chart-container">
+                <canvas id="dataChart" width="600" height="300"></canvas>
+            </div>
+            <div class="lower-section">
+                <div id="rocketViewer" class="rocket-visual" style="width: 500px; height: 500px;"></div>
+                <div class="gps-container">
+                    <div class="section-title">GPS 地圖</div>
+                    <!-- GPS 地圖內容 -->
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>

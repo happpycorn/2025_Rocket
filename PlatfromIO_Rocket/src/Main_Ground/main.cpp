@@ -40,15 +40,15 @@ void setup() {
         while (1);
     }
 
-    if (!mserver.begin()) {
-        Serial.println("SPIFFS init failed!");
-        while (1);
-    }
-
     // 啟用 WiFi AP 模式
     WiFi.softAP(SSID, PASSWORD);
     Serial.println("AP Started. IP: ");
     Serial.println(WiFi.softAPIP());
+
+    if (!mserver.begin()) {
+        Serial.println("SPIFFS init failed!");
+        while (1);
+    }
 
     xTaskCreatePinnedToCore(LowFreqTask, "LowFreqTask", 12288, NULL, 1, NULL, 1);
 }

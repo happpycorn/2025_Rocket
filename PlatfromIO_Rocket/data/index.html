@@ -16,7 +16,7 @@
   <script>
     async function fetchData() {
       try {
-        const res = await fetch("/");
+        const res = await fetch("/data");
         const data = await res.json();
         const content = document.getElementById("content");
         content.innerHTML = "";
@@ -32,6 +32,7 @@
         addSection("姿態資料 (attit_data)", data.attit_data);
         addSection("火箭狀態 (rocket_state)", data.rocket_state);
         addSection("GPS 資料", data.gps_data);
+        addSection("最高高度", data.max_alt);
         addSection("接收封包數", data.recive_pack_count);
         addSection("最後接收時間", data.last_recive_time);
         addSection("警告 (warning)", data.warning);

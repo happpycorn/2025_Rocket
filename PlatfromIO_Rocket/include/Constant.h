@@ -111,8 +111,8 @@ constexpr int WARNING_INDEX_MAX = 100;
 typedef struct {
     // Sys
     unsigned long long time;
-    int slope_index = 0;
-    int warning_index = 0;
+    int slope_index = SLOPE_INDEX_MAX;
+    int warning_index = WARNING_INDEX_MAX;
     bool slope_overflow = false;
     bool warning_overflow = false;
 
@@ -122,6 +122,7 @@ typedef struct {
     bool rocket_state[BOOL_DATA_LEN];       // 0~2 Para, 3~4 Fail, 5~11 Sensor
     double gps_data_d[DOUBLE_DATA_LEN];       // 0~1 rocket, 2~3 self
     float local_gps_data_f[GPS_FLOAT_DATA_LEN];
+    float max_alt = -1.0 / 0.0;
 
     // LoRa
     unsigned long long last_recive_time;
