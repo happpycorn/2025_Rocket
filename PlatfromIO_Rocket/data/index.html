@@ -1,48 +1,132 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>火箭數據監控</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; background: #f0f0f0; }
-    h2 { margin-top: 30px; }
-    pre { background: #fff; padding: 10px; border: 1px solid #ccc; overflow-x: auto; }
-  </style>
+    <meta charset="UTF-8" />
+    <title>Rocket Monitor</title>
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components-left.css">
+    <link rel="stylesheet" href="styles/visualization-right.css">
 </head>
 <body>
-  <h1>火箭即時數據</h1>
-  <div id="content">載入中...</div>
+    <main class="wrapper">
+        <!-- 左側：監控資訊 -->
+        <section class="monitor-panel">
+            <div id="bool_data_list" class="bool-data-list">
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label">Para 1</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label">Para 2</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label">Para 3</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label">L1 Fail</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label">L2 Fail</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label">G. GPS</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label">BMP 1</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label">BMP 2</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label">Acc</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label">Hgyro</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label">Hfreq Data</div>
+                </div>
+                <div class="bool_item">
+                    <div class="bool_circle bool_off"></div>
+                    <div class="bool-label">F. GPS</div>
+                </div>
+            </div>
 
-  <script>
-    async function fetchData() {
-      try {
-        const res = await fetch("/data");
-        const data = await res.json();
-        const content = document.getElementById("content");
-        content.innerHTML = "";
+            <div class="monitor-data-item">
+                <div class="monitor-item-l">
+                    <div class="monitor-item">
+                        <div class="label">最大高度</div>
+                        <div class="value" id="alt_max">--</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="label">現在高度</div>
+                        <div class="value" id="alt_now">--</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="label">垂直速度</div>
+                        <div class="value" id="ver">--</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="label">垂直加速度</div>
+                        <div class="value" id="acc">--</div>
+                    </div>
+                </div>
+                <div class="monitor-item-r">
+                    <div class="monitor-item">
+                        <div class="label">地面站運行時間</div>
+                        <div class="value" id="runtime">--</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="label">最新封包編號</div>
+                        <div class="value" id="packet_index">--</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="label">上次接收時間</div>
+                        <div class="value" id="receive_time">--</div>
+                    </div>
+                    <div class="monitor-item">
+                        <div class="label">俯仰角</div>
+                        <div class="value" id="pitch">--</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="warning-panel">
+                <div class="section-title">警告訊息</div>
+                <ul id="warning-list" class="warning-list"></ul>
+            </div>
+        </section>
 
-        const addSection = (title, value) => {
-          const div = document.createElement("div");
-          div.innerHTML = `<h2>${title}</h2><pre>${JSON.stringify(value, null, 2)}</pre>`;
-          content.appendChild(div);
-        };
-
-        addSection("時間", data.time);
-        addSection("斜率資料 (slope_data)", data.slope_data);
-        addSection("姿態資料 (attit_data)", data.attit_data);
-        addSection("火箭狀態 (rocket_state)", data.rocket_state);
-        addSection("GPS 資料", data.gps_data);
-        addSection("最高高度", data.max_alt);
-        addSection("接收封包數", data.recive_pack_count);
-        addSection("最後接收時間", data.last_recive_time);
-        addSection("警告 (warning)", data.warning);
-      } catch (e) {
-        document.getElementById("content").innerHTML = "取得資料失敗：" + e;
-      }
-    }
-
-    setInterval(fetchData, 1000); // 每秒刷新一次
-    fetchData(); // 初始載入
-  </script>
+        <!-- 右側：視覺化區塊 -->
+        <section class="visualization-panel">
+            <div class="chart-container">
+                <canvas id="dataChart" width="600" height="300"></canvas>
+            </div>
+            <div class="lower-section">
+                <div id="rocketViewer" class="rocket-visual">
+                    <div class="rocket-visual-section-title">火箭飛行狀態</div>
+                    <canvas id="pitchCanvas"></canvas>
+                </div>
+                <div class="gps-container">
+                    <div class="gps-section-title">GPS 地圖</div>
+                    <div class="gps-distance" id="gps-distance"></div>
+                    <canvas id="gpsCanvas"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="scripts/chart.js"></script>
+    <script type="module" src="scripts/main.js"></script>
 </body>
-</html>

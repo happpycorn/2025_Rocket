@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HFreqSensor.h"
+#include "Constant.h"
 #include <Adafruit_BMP3XX.h>
 
 class BMPController : public HFreqSensor {

@@ -2,15 +2,11 @@
 
 bool Accelerometer::begin() {
 
-    mpu.verbose(true);  // 顯示詳細初始化過程
+    Serial.println("進入 begin()");
+    bool result = mpu.setup(0x68);
+    Serial.print("setup 結果: "); Serial.println(result);
 
-    if (!mpu.setup()) {
-        return false;
-    }
-
-    // 初始化 Madgwick 濾波器（更新頻率 100Hz）
-    filter.begin(100);
-    
+    Serial.println("準備 return true");
     return true;
 }
 
@@ -35,16 +31,9 @@ bool Accelerometer::getData(float data[]) {
     data[data_addr+7] = mpu.getMagY();
     data[data_addr+8] = mpu.getMagZ();
 
-    // 傳入 Madgwick 濾波器（有用磁力計 → 可得 Yaw）
-    filter.update(
-        data[data_addr+0], data[data_addr+1], data[data_addr+2],
-        data[data_addr+3], data[data_addr+4], data[data_addr+5],
-        data[data_addr+6], data[data_addr+7], data[data_addr+8]
-    );
-
-    data[data_addr+9] = filter.getRoll();
-    data[data_addr+10] = filter.getPitch();
-    data[data_addr+11] = filter.getYaw();
+    data[data_addr+9] = mpu.getRoll();
+    data[data_addr+10] = mpu.getPitch();
+    data[data_addr+11] = mpu.getYaw();
 
     return true;
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HFreqSensor.h"
+#include "Constant.h"
 #include <Adafruit_SHTC3.h>
 
 class Hygrometer : public HFreqSensor{

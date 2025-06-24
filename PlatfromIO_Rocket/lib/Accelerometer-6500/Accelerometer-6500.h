@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HFreqSensor.h"
+#include "Constant.h"
 #include <Wire.h>
 
 #define MPU_ADDR 0x68  // MPU-6500 的預設 I2C 位址（AD0 接 GND）
