@@ -17,11 +17,9 @@ void loop() {
     float data[12];
 
     if (mpu.getData(data)) {
-        for (int i = 9; i < 12; i++) {
-            Serial.print(data[i]); 
-            Serial.print(", ");
-        }
-        Serial.println();
+        Serial.print(data[9]); Serial.print(",");
+        Serial.print(data[10]); Serial.print(",");
+        Serial.print(data[11]); Serial.println();
     }
     
     delay(10);
