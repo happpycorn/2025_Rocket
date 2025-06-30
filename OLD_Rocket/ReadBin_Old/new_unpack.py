@@ -1,21 +1,18 @@
+import csv
 import struct
 
-# 設定常數
 LF_FLOAT_DATA_LEN = 34
 LF_BOOL_DATA_LEN = 11
 LF_DOUBLE_DATA_LEN = 2
 
-# 每筆資料的大小（位元組）
 ENTRY_SIZE = (
     4 * LF_FLOAT_DATA_LEN +
     1 * LF_BOOL_DATA_LEN +
     8 * LF_DOUBLE_DATA_LEN
 )
 
-# 格式字串：Little-endian、float、bool、double
 STRUCT_FORMAT = f"<{LF_FLOAT_DATA_LEN}f{LF_BOOL_DATA_LEN}?{LF_DOUBLE_DATA_LEN}d"
 
-# 上面那三個 LABEL 定義可以放這裡
 LF_FLOAT_LABELS = [
     "BMP1_Temp", "BMP1_Pressure", "BMP1_Altitude",
     "BMP2_Temp", "BMP2_Pressure", "BMP2_Altitude",
@@ -42,7 +39,7 @@ LF_DOUBLE_LABELS = [
 ]
 
 
-def read_lfreq_data_with_labels(filename):
+def read_lfreq_data_with_labels(filename: str) -> dict:
     entries = []
     with open(filename, "rb") as file:
         index = 0
@@ -75,18 +72,20 @@ def read_lfreq_data_with_labels(filename):
             index += 1
     return entries
 
-# 示範使用
 if __name__ == "__main__":
     data_entries = read_lfreq_data_with_labels(r"Program\ReadBin\data.bin")
-    for entry in data_entries:
-        print(f"第 {entry['index']} 筆：")
-        print("  [Float]")
-        for k, v in entry['float'].items():
-            print(f"    {k}: {v:.2f}")
-        print("  [Bool]")
-        for k, v in entry['bool'].items():
-            print(f"    {k}: {v}")
-        print("  [Double]")
-        for k, v in entry['double'].items():
-            print(f"    {k}: {v:.8f}")
-        print("-" * 50)
+
+    fieldnames = ["index"] + LF_FLOAT_LABELS + LF_BOOL_LABELS + LF_DOUBLE_LABELS
+    
+    with open("output.csv", mode="w", newline="", encoding="utf-8-sig") as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for entry in data_entries:
+            row = {"index": entry["index"]}
+            row.update(entry["float"])
+            row.update(entry["bool"])
+            row.update(entry["double"])
+            writer.writerow(row)
+
+    print(f"已輸出 {len(data_entries)} 筆資料到 output.csv")
