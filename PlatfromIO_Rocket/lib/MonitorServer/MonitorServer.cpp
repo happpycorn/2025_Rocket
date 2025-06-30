@@ -3,12 +3,6 @@
 WebServer MonitorServer::server(80);
 RecordData MonitorServer::current;
 
-void MonitorServer::handleRoot() {
-    File file = SPIFFS.open("/index.html", "r");
-    server.streamFile(file, "text/html");
-    file.close();
-}
-
 void MonitorServer::handleData() {
 
     extern RecordData data;
@@ -54,13 +48,15 @@ void MonitorServer::handleData() {
 
 bool MonitorServer::begin() {
     
-    if (!SPIFFS.begin(true)) {
-        return false;
-    }
+    if (!SPIFFS.begin(true)) { return false; }
 
-    server.on("/", HTTP_GET, handleRoot);
+    server.serveStatic("/", SPIFFS, "/index.html");
+    server.serveStatic("/asset/", SPIFFS, "/asset/");
+    server.serveStatic("/styles/", SPIFFS, "/styles/");
+    server.serveStatic("/scripts/", SPIFFS, "/scripts/");
     server.on("/data", HTTP_GET, handleData);
     server.begin();
+
     return true;
 }
 

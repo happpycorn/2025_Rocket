@@ -18,7 +18,7 @@ export function resizePitchCanvas() {
 }
 
 const rocketImg = new Image();
-rocketImg.src = "rocket.png"; // 放在 public/images/rocket.png 或其他路徑
+rocketImg.src = "asset/rocket.png";
 
 export function drawPitch(pitch) {
     const centerX = canvas.width / 2 / magnification;

@@ -55,7 +55,7 @@ void setup() {
 
 void loop() {
    Result r = lora.reciveData();
-    if (r.message != nullptr) Serial.println(r.message);
+    if (r.is_message) Serial.println(r.message);
     if (r.data.is_data) {
         portENTER_CRITICAL(&dataMux);
         data.last_recive_time = millis();
@@ -67,6 +67,8 @@ void loop() {
         for (int i = 0; i < RECIVE_DOUBLE_DATA_LEN; i++) data.gps_data_d[i] = r.data.d[i];
         data.slope_index = (data.slope_index + 1)%SLOPE_INDEX_MAX;
         portEXIT_CRITICAL(&dataMux);
+
+        Serial.print("Recive:"); Serial.println(r.data.pack_count);
     }
 
     mserver.handleClient();

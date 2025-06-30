@@ -17,7 +17,7 @@ bool GPSModule::getData(double d_data[], float f_data[]) {
 
         d_data[0] = NAN;
         d_data[1] = NAN;
-        for (int i = 0; i <= 13; i++) { f_data[data_addr + i] = NAN; }
+        for (int i = 0; i < 11; i++) { f_data[data_addr + i] = NAN; }
 
         return false;
     }

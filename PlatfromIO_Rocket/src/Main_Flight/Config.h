@@ -13,7 +13,6 @@ constexpr int SERVO_PIN_3 = 25;
 #include "Constant.h"
 #include "DataBuffer.h"
 #include "GPSModule.h"
-#include "HFreqSensor.h"
 #include "Hygrometer.h"
 #include "BMPController.h"
 #include "ServoController.h"

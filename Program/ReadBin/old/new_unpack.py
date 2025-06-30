@@ -1,7 +1,7 @@
 import struct
 
 # 設定常數
-LF_FLOAT_DATA_LEN = 33
+LF_FLOAT_DATA_LEN = 34
 LF_BOOL_DATA_LEN = 11
 LF_DOUBLE_DATA_LEN = 2
 
