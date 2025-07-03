@@ -3,7 +3,7 @@ import csv
 import matplotlib.pyplot as plt
 
 CATCH_VALUE = ["Position East of launch (m)", "Position North of launch (m)"]
-FOLDER_PATH = "Program/Land_Point_Sim/Data"
+FOLDER_PATH = "Program/Sim_Data"
 colors = ['#019A7B', '#1F318F', '#F20028']
 labels = ['2 m/s', '4 m/s', '6 m/s']
 output_image_name = "Landing_Point_Prediction_Map.png"
