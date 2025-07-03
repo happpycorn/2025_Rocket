@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 # === 參數設定 ===
-FOLDER_PATH = "Program/Land_Point_Sim/Data"
+FOLDER_PATH = "Program/Sim_Data"
 FILE_PATTERN = "{}_{}.csv"           # 檔名格式，例如 0_0.csv、1_0.csv
 FILE_COUNT = 8                      # 要讀幾張檔案（例如 0~4）
 COLOR_LIST = ['#F20028', '#1F318F', '#019A7B']

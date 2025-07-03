@@ -2,12 +2,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # 載入 CSV 檔案
-df = pd.read_csv('Data/RocketSim-WS0.csv')  # <- 改成你的檔名
+df = pd.read_csv('Program/Sim_Data/0_0.csv')  # <- 改成你的檔名
 
 output_image_name = "rocket_flight_data_alt_ver_acc_vs_t.png"
 
 # 提取欄位
-time = df['Time (s)']
+time = df['# Time (s)']
 altitude = df['Altitude (m)']
 velocity = df['Vertical velocity (m/s)']
 acceleration = df['Vertical acceleration (m/s²)']
@@ -44,6 +44,6 @@ plt.title('Flight Data: Altitude, Velocity, and Acceleration vs Time')
 plt.grid(True)
 plt.tight_layout()
 
-plt.savefig(output_image_name)
+plt.savefig(output_image_name, dpi=500)
 
 plt.show()
