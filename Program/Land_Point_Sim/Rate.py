@@ -60,10 +60,10 @@ for i in tqdm(range(N)):
     else:
         angle_deg = np.random.uniform(low, high)
 
-    theta = np.radians(angle_deg)
+    theta = np.radians(270 - angle_deg)
 
-    dx = (35 * s * np.sin(theta) + 360) 
-    dy = (32.9 * s * np.cos(theta) - 1)
+    dx = (35 * s * np.cos(theta) + 360) 
+    dy = (32.9 * s * np.sin(theta) - 1)
 
     xs.append(dx)
     ys.append(dy)
