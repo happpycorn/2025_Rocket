@@ -1,7 +1,7 @@
 import pandas as pd
 
 # 請把 'your_file.csv' 換成你的檔名
-df = pd.read_csv("Data/RocketSim-WS0.csv")
+df = pd.read_csv("Program/Sim_Data/0_0.csv")
 
 # 列名清理（有些軟體會在標題加奇怪字元）
 df.columns = [col.strip() for col in df.columns]

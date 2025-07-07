@@ -72,7 +72,7 @@ ReciveData LoRaDataReciver::decode(uint8_t code[], uint8_t check_code) {
 
     if (checksum != check_code) {
         data.is_data = false;
-        Serial.print(checksum); Serial.println(check_code); 
+        Serial.print("Recive Fail: "); Serial.print(checksum); Serial.print(" "); Serial.println(check_code); 
         return data;
     }
 

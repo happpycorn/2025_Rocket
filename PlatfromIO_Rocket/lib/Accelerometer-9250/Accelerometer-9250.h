@@ -4,13 +4,12 @@
 #include <Wire.h>
 #include "MPU9250.h"
 
-class Accelerometer {
+class Accelerometer : public HFreqSensor {
 public:
-    Accelerometer(int addr) : data_addr(addr) {}
-    bool begin();
-    bool getData(float data[]);
+    Accelerometer(int addr) : HFreqSensor(addr) {}
+    bool begin() override;
+    bool getData(float data[]) override;
     
 private:
     MPU9250 mpu;
-    int data_addr;
 };

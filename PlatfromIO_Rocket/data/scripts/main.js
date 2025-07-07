@@ -10,7 +10,8 @@ import { resizePitchCanvas } from './rocket-viewer.js';
 
 async function fetchData() {
     try {
-        const res = await fetch("/data/test_data.json");
+        const res = await fetch("/data");
+        // const res = await fetch("/data/asset/test_data.json");
         const data = await res.json();
 
         updateBoolCircles(data.rocket_state);

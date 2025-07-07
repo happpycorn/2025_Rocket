@@ -34,7 +34,7 @@ constexpr uint8_t HEADER1 = 0xAA;
 constexpr uint8_t HEADER2 = 0x55;
 constexpr uint8_t TYPE_DATA = 0x01;
 constexpr uint8_t TYPE_TEXT = 0x02;
-constexpr int BINARY_LENGTH = 35;
+constexpr int BINARY_LENGTH = 46;
 constexpr int LORA_BUFFER_LEN = 64;
 
 // For Quene

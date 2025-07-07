@@ -2,12 +2,7 @@
 
 bool Accelerometer::begin() {
 
-    Serial.println("進入 begin()");
-    bool result = mpu.setup(0x68);
-    Serial.print("setup 結果: "); Serial.println(result);
-
-    Serial.println("準備 return true");
-    return true;
+    return mpu.setup(0x68);
 }
 
 
