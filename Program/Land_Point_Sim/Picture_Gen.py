@@ -34,7 +34,7 @@ for i in range(8):
             print(f"讀取失敗：{filename}，錯誤：{e}")
 
 # === 繪圖 ===
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(8, 6))
 plt.scatter(0, 0, color='black', marker='x', s=100, label='Launch Point')
 
 for j in range(3):
@@ -42,10 +42,35 @@ for j in range(3):
     y_vals = [float(xy[1]) for xy in xy_lists[j]]
     plt.scatter(x_vals, y_vals, label=labels[j], color=colors[j], marker='o')
 
+# === ABCDEFG 座標（以發射點為中心的 X, Y，單位：m）===
+ab_points = {
+    'A': (628.5, -599.0),
+    'B': (271.5, -599.0),
+    'C': (-55.0, -105.0),
+    'D': (-55.0, 111.0),
+    'E': (262.0, 545.5),
+    'F': (628.5, 545.5),
+    'G': (939.2, 18.5),
+}
+
+# === 畫出 ABCDEFG 點 ===
+for name, (x, y) in ab_points.items():
+    plt.scatter(x, y, color='orange', marker='s', s=60, edgecolors='black', zorder=5)
+    plt.text(x + 10, y + 10, name, fontsize=9, color='black')
+
+# === 畫出包住 ABCDEFG 的區域 ===
+# 排序：照你的資料順序連起來會形成一個封閉區域
+polygon_order = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+polygon_coords = [ab_points[name] for name in polygon_order]
+
+# 填色
+x_polygon, y_polygon = zip(*polygon_coords)
+plt.fill(x_polygon, y_polygon, color='orange', alpha=0.1, label='Landing Safety Zone')
+
 plt.xlabel(CATCH_VALUE[0])
 plt.ylabel(CATCH_VALUE[1])
-plt.xlim(-100, 1000)
-plt.ylim(-300, 300)
+plt.xlim(-200, 1300)
+plt.ylim(-650, 600)
 plt.title("Landing point prediction map")
 plt.legend()
 plt.grid(True, color='gray', linestyle='--', linewidth=0.5, alpha=0.3)

@@ -20,30 +20,51 @@ fig, axs = plt.subplots(nrows=1, ncols=5, figsize=(34, 9), sharey=True, sharex=T
 
 for i, file_path in enumerate(csv_files):
     df = pd.read_csv(os.path.join(folder_path, file_path))
+
+    x = df['Position East of launch (m)']
+    y = df['Altitude (m)']
+    t = df['# Time (s)']  # 時間欄位
     
-    axs[i].plot(
-        df['Position East of launch (m)'], df['Altitude (m)'],
-        color=plot_colors[i % len(plot_colors)],
-        linewidth=2.5
-    )
+    axs[i].plot(x, y, color=plot_colors[i % len(plot_colors)], linewidth=2.5)
     
-    wind_speed = (i - 2) * 2  # 轉換 index 為風速
+    wind_speed = (i - 2) * 2  # 對應的風速
     axs[i].set_title(f"Wind: {wind_speed:+} m/s", fontsize=18)
     axs[i].grid(True)
+
+    # 找最高點
+    idx_max = y.idxmax()
+    x_max = x[idx_max]
+    y_max = y[idx_max]
+    t_max = t[idx_max]
+    axs[i].scatter(x_max, y_max, color='red', s=60, label='Max Altitude')
+    axs[i].annotate(f"{y_max:.1f} m\n{t_max:.1f} s",
+                    (x_max, y_max),
+                    textcoords="offset points",
+                    xytext=(0, 10),
+                    ha='left',
+                    fontsize=12,
+                    color='red')
     
-    # 只在最左邊加 y 標籤
+    # 找落地點（最後一筆資料）
+    x_land = x.iloc[-1]
+    y_land = y.iloc[-1]
+    t_land = t.iloc[-1]
+    axs[i].scatter(x_land, y_land, color='blue', s=60, label='Landing Point')
+    axs[i].annotate(f"{x_land:.1f} m\n{t_land:.1f} s",
+                    (x_land, y_land),
+                    textcoords="offset points",
+                    xytext=(20, 5),
+                    ha='left',
+                    fontsize=12,
+                    color='blue')
+    
+    axs[i].set_xlim(-50, 600)
+    axs[i].set_ylim(-50, 1300)
+
     if i == 0:
         axs[i].set_ylabel("Altitude (m)", fontsize=16)
-    
-    # 可選：設 x/y 軸範圍統一（你可以觀察落點差距是否需要）
-    # axs[i].set_xlim(-150, 150)
-    # axs[i].set_ylim(0, 1400)
 
-# 最右邊加 x 標籤
 axs[-3].set_xlabel("Position East of Launch (m)", fontsize=16)
-
-# 整體標題
-# fig.suptitle("Rocket Flight Trajectories under Different Wind Speeds", fontsize=22, y=1.02)
 
 fig.tight_layout()
 plt.savefig(output_image_name, bbox_inches='tight')
