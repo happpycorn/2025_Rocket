@@ -31,7 +31,7 @@ direction_angle_ranges = {
     "NNW": (326.25, 348.75),
 }
 
-N = 10000
+N = 5000
 
 total = sum(direction_counts.values())
 direction_probs = {k: v / total for k, v in direction_counts.items()}
