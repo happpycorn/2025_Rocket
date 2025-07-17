@@ -5,9 +5,9 @@ bool iicScan();
 void findiic(byte i, bool checklist[]);
 
 ServoController* servos[SERVO_COUNT] = {
-    new ServoController(SERVO_PIN_1, 120, 0),
-    new ServoController(SERVO_PIN_2, 120, 0),
-    new ServoController(SERVO_PIN_3, 120, 0)
+    new ServoController(SERVO_PIN_1, 90, 35),
+    new ServoController(SERVO_PIN_2, 90, 35),
+    new ServoController(SERVO_PIN_3, 90, 35)
 };
 
 String inputString = "";
