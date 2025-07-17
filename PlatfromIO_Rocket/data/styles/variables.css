@@ -1,0 +1,10 @@
+:root {
+    --bg-color: #121212;
+    --panel-bg: #1e1e1e;
+    --text-color: #ffffffcc;
+    --label-color: #aaaaaa;
+    --accent-color: #4caf50;
+    --warning-color: #ff5555;
+    --border-color: #2a2a2a;
+    --font: 'Segoe UI', sans-serif;
+}

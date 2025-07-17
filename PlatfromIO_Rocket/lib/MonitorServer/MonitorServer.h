@@ -9,6 +9,7 @@
 class MonitorServer {
 private:
     static WebServer server;
+    static RecordData current;
     
 public:
     bool begin();
