@@ -38,9 +38,9 @@ constexpr int BINARY_LENGTH = 46;
 constexpr int LORA_BUFFER_LEN = 64;
 
 // For Servo
-constexpr int SERVO_PIN_1 = 32;
-constexpr int SERVO_PIN_2 = 33;
-constexpr int SERVO_PIN_3 = 25;
+constexpr int SERVO_PIN_1 = 26;
+constexpr int SERVO_PIN_2 = 25;
+constexpr int SERVO_PIN_3 = 33;
 
 // For Quene
 constexpr int QUEUE_LENGTH = 200;

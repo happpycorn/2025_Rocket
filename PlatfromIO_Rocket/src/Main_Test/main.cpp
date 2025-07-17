@@ -41,7 +41,11 @@ void loop() {
 
         inputString.trim();
 
-        if (inputString == "00") servos[0].setServoAngle(true);
+        if (inputString == "00") {
+            servos[0].setServoAngle(true);
+            Serial.print("收到：");
+        }
+
         else if (inputString == "01") servos[0].setServoAngle(false);
         else if (inputString == "10") servos[1].setServoAngle(true);
         else if (inputString == "11") servos[1].setServoAngle(false);
