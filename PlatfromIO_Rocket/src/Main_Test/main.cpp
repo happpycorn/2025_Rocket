@@ -41,12 +41,12 @@ void loop() {
 
         inputString.trim();
 
-        if (inputString == "00") servos[0]->setServoAngle(true);
-        else if (inputString == "01") servos[0]->setServoAngle(false);
-        else if (inputString == "10") servos[1]->setServoAngle(true);
-        else if (inputString == "11") servos[1]->setServoAngle(false);
-        else if (inputString == "20") servos[2]->setServoAngle(true);
-        else if (inputString == "21") servos[2]->setServoAngle(false);
+        if (inputString == "00") servos[0]->setServoAngle(false);
+        else if (inputString == "01") servos[0]->setServoAngle(true);
+        else if (inputString == "10") servos[1]->setServoAngle(false);
+        else if (inputString == "11") servos[1]->setServoAngle(true);
+        else if (inputString == "20") servos[2]->setServoAngle(false);
+        else if (inputString == "21") servos[2]->setServoAngle(true);
         else Serial.println("Unknow input");
 
         for (int i = 0; i < 3; i++) Serial.print(servos[i]->isOpen);
