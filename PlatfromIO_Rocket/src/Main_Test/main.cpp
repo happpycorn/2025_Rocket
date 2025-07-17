@@ -4,10 +4,10 @@ void getPressure();
 bool iicScan();
 void findiic(byte i, bool checklist[]);
 
-ServoController servos[SERVO_COUNT] = {
-    ServoController(SERVO_PIN_1),
-    ServoController(SERVO_PIN_2),
-    ServoController(SERVO_PIN_3)
+ServoController* servos[SERVO_COUNT] = {
+    new ServoController(SERVO_PIN_1),
+    new ServoController(SERVO_PIN_2),
+    new ServoController(SERVO_PIN_3)
 };
 
 String inputString = "";
@@ -24,7 +24,7 @@ void setup() {
 
     if (isiicSuccess) getPressure();
     
-    for (int i = 0; i < SERVO_COUNT; i++) { servos[i].begin(); }
+    for (int i = 0; i < SERVO_COUNT; i++) { servos[i]->begin(); }
 
     Serial.println("Input servo number + bool to control servo.");
     Serial.println("Like 00 or 21 or 10.");
@@ -41,17 +41,16 @@ void loop() {
 
         inputString.trim();
 
-        if (inputString == "00") {
-            servos[0].setServoAngle(true);
-            Serial.print("收到：");
-        }
-
-        else if (inputString == "01") servos[0].setServoAngle(false);
-        else if (inputString == "10") servos[1].setServoAngle(true);
-        else if (inputString == "11") servos[1].setServoAngle(false);
-        else if (inputString == "20") servos[2].setServoAngle(true);
-        else if (inputString == "21") servos[2].setServoAngle(false);
+        if (inputString == "00") servos[0]->setServoAngle(true);
+        else if (inputString == "01") servos[0]->setServoAngle(false);
+        else if (inputString == "10") servos[1]->setServoAngle(true);
+        else if (inputString == "11") servos[1]->setServoAngle(false);
+        else if (inputString == "20") servos[2]->setServoAngle(true);
+        else if (inputString == "21") servos[2]->setServoAngle(false);
         else Serial.println("Unknow input");
+
+        for (int i = 0; i < 3; i++) Serial.print(servos[i]->isOpen);
+        Serial.println();
 
         inputString = "";
     }
