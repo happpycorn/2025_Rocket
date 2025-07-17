@@ -27,7 +27,7 @@ void LoRaDataSender::sendData(float f_data[], bool b_data[], double d_data[]) {
         memcpy(&buffer[index], &f_data[i], sizeof(float));
         index += sizeof(float);
     }
-
+    
     // Bool Data 11
     uint8_t boolByte1 = 0, boolByte2 = 0;
     for (int i = 0; i < 8; i++) {

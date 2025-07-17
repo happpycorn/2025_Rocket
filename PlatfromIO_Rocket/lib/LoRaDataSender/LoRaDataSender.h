@@ -6,7 +6,7 @@
 class LoRaDataSender {
 private:
     HardwareSerial serial;
-    const int bufferSize = sizeof(int) + 3 * sizeof(float) + 2 + 2 * sizeof(double);
+    const int bufferSize = sizeof(int) + 6 * sizeof(float) + 2 + 2 * sizeof(double);
     
 public:
     int pack_count = 0;
