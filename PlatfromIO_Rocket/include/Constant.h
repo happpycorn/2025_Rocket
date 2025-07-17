@@ -37,6 +37,11 @@ constexpr uint8_t TYPE_TEXT = 0x02;
 constexpr int BINARY_LENGTH = 46;
 constexpr int LORA_BUFFER_LEN = 64;
 
+// For Servo
+constexpr int SERVO_PIN_1 = 32;
+constexpr int SERVO_PIN_2 = 33;
+constexpr int SERVO_PIN_3 = 25;
+
 // For Quene
 constexpr int QUEUE_LENGTH = 200;
 
