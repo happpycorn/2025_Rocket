@@ -14,7 +14,7 @@ public:
 
 private:
 
-    Servo servo;
+    Servo myservo;
     int pin;
     int angleOn;
     int angleOff;
