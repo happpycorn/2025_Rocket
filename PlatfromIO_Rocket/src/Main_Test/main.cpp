@@ -5,8 +5,8 @@ bool iicScan();
 void findiic(byte i, bool checklist[]);
 
 ServoController* servos[SERVO_COUNT] = {
-    new ServoController(SERVO_PIN_1, 90, 35, 1),
-    new ServoController(SERVO_PIN_2, 90, 35, 2),
+    new ServoController(SERVO_PIN_1, 35, 90, 1),
+    new ServoController(SERVO_PIN_2, 35, 90, 2),
     new ServoController(SERVO_PIN_3, 90, 35, 3)
 };
 
