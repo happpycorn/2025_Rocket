@@ -1,7 +1,5 @@
 #include "SDDataManager_G.h"
 
-SPIClass mySPI(VSPI);
-
 bool SDDataManager::begin() {
     if (!SD.begin(SD_CS_PIN)) return false;
     if (SD.exists(path)) return true;

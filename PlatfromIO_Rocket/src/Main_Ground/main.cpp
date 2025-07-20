@@ -6,6 +6,14 @@ RecordData data;
 SDDataManager sd;
 MonitorServer mserver;
 
+ServoController* servos[SERVO_COUNT] = {
+    new ServoController(SERVO_PIN_1, OPEN_ANGLE, CLOSE_ANGLE, 1),
+    new ServoController(SERVO_PIN_2, OPEN_ANGLE, CLOSE_ANGLE, 2),
+    new ServoController(SERVO_PIN_3, OPEN_ANGLE, CLOSE_ANGLE, 3)
+};
+
+String inputString = "";
+
 portMUX_TYPE dataMux = portMUX_INITIALIZER_UNLOCKED;
 
 const TickType_t xFrequencyTask2 = pdMS_TO_TICKS(TASK_2_DELAY_MS);
@@ -50,25 +58,67 @@ void setup() {
         while (1);
     }
 
+    for (int i = 0; i < SERVO_COUNT; i++) { servos[i]->begin(); }
+
     xTaskCreatePinnedToCore(LowFreqTask, "LowFreqTask", 12288, NULL, 1, NULL, 1);
 }
 
 void loop() {
    Result r = lora.reciveData();
-    if (r.is_message) Serial.println(r.message);
+
+    if (r.is_message) {
+        Serial.println(r.message);
+        data.warning[data.warning_index] = r.message;
+        if (data.warning_index + 1 < WARNING_INDEX_MAX) data.warning_index += 1;
+        else {
+            data.warning_index = 0;
+            data.warning_overflow = true;
+        }
+    }
+
     if (r.data.is_data) {
         portENTER_CRITICAL(&dataMux);
         data.last_recive_time = millis();
         data.recive_pack_count = r.data.pack_count;
-        data.slope_index = (data.slope_index + 1)%SLOPE_INDEX_MAX;
+
+        if (data.slope_index + 1 < SLOPE_INDEX_MAX) data.slope_index += 1;
+        else {
+            data.slope_index = 0;
+            data.slope_overflow = true;
+        }
         data.slope_data[data.slope_index][0] = data.last_recive_time;
         for (int i = 1; i < 4; i++) data.slope_data[data.slope_index][i] = r.data.f[i-1];
+
         for (int i = 3; i < RECIVE_FLOAT_DATA_LEN; i++) data.attit_data[i] = r.data.f[i];
         for (int i = 0; i < RECIVE_BOOL_DATA_LEN; i++) data.rocket_state[i] = r.data.b[i];
         for (int i = 0; i < RECIVE_DOUBLE_DATA_LEN; i++) data.gps_data_d[i] = r.data.d[i];
         portEXIT_CRITICAL(&dataMux);
 
         Serial.print("Recive:"); Serial.println(r.data.pack_count);
+    }
+
+    while (Serial.available()) {
+        char c = Serial.read();
+
+        if (c != '\n' && c != '\r') {
+            inputString += c;
+            continue;
+        }
+
+        inputString.trim();
+
+        if (inputString == "00") servos[0]->setServoAngle(false);
+        else if (inputString == "01") servos[0]->setServoAngle(true);
+        else if (inputString == "10") servos[1]->setServoAngle(false);
+        else if (inputString == "11") servos[1]->setServoAngle(true);
+        else if (inputString == "20") servos[2]->setServoAngle(false);
+        else if (inputString == "21") servos[2]->setServoAngle(true);
+        else Serial.println("Unknow input");
+
+        for (int i = 0; i < 3; i++) Serial.print(servos[i]->isOpen);
+        Serial.println();
+
+        inputString = "";
     }
 
     mserver.handleClient();
