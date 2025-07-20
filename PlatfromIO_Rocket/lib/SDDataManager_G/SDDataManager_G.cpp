@@ -23,7 +23,7 @@ bool SDDataManager::saveData(const RecordData &data) {
     file.write((uint8_t*)&data.warning_overflow, sizeof(data.warning_overflow));
 
     // Data - slope_data[SLOPE_INDEX_MAX][4]
-    file.write((uint8_t*)data.slope_data, sizeof(data.slope_data));
+    file.write((uint8_t*)data.slope_data[0], sizeof(data.slope_data[0]));
 
     // attit_data[3]
     file.write((uint8_t*)data.attit_data, sizeof(data.attit_data));
