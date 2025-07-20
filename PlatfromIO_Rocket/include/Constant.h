@@ -38,11 +38,19 @@ constexpr int BINARY_LENGTH = 46;
 constexpr int LORA_BUFFER_LEN = 64;
 
 // For Servo
-constexpr int SERVO_PIN_1 = 26;
-constexpr int SERVO_PIN_2 = 25;
-constexpr int SERVO_PIN_3 = 33;
-constexpr int OPEN_ANGLE = 35;
-constexpr int CLOSE_ANGLE = 90;
+struct ServoSetting {
+    int pin;
+    int closeAngle;
+    int openAngle;
+    int id;
+};
+
+constexpr ServoSetting servos_settings[3] = {
+    // Pin, Open_angle, Close_angle, Channel
+    {26, 35, 90, 1},
+    {25, 35, 90, 2},
+    {33, 90, 35, 3},
+};
 
 // For Quene
 constexpr int QUEUE_LENGTH = 200;

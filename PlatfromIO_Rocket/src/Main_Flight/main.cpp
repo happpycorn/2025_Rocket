@@ -8,9 +8,9 @@ HFreqSensor* hfSensor[HFREQ_SENSOR_COUNT] = {
 };
 
 ServoController* servos[SERVO_COUNT] = {
-    new ServoController(SERVO_PIN_1, OPEN_ANGLE, CLOSE_ANGLE, 1),
-    new ServoController(SERVO_PIN_2, OPEN_ANGLE, CLOSE_ANGLE, 2),
-    new ServoController(SERVO_PIN_3, OPEN_ANGLE, CLOSE_ANGLE, 3)
+    new ServoController(servos_settings[0]),
+    new ServoController(servos_settings[1]),
+    new ServoController(servos_settings[2])
 };
 
 SDDataManager sd;
@@ -44,8 +44,8 @@ void HighFreqTask(void *pvParameters) {
 
         // 如果狀態改變，設定伺服器角度
         for (int i = 0; i < SERVO_COUNT; i++) {
-            if (data.b[SERVO_DATA_ADDR+i] != servos[i].isOpen) {
-                servos[i].setServoAngle(data.b[SERVO_DATA_ADDR+i]);
+            if (data.b[SERVO_DATA_ADDR+i] != servos[i]->isOpen) {
+                servos[i]->setServoAngle(data.b[SERVO_DATA_ADDR+i]);
             }
         }
 
@@ -105,7 +105,7 @@ void setup() {
 
     gps.begin();
 
-    for (int i = 0; i < SERVO_COUNT; i++) { servos[i].begin(); }
+    for (int i = 0; i < SERVO_COUNT; i++) { servos[i]->begin(); }
 
     buffer.createQueue();
     

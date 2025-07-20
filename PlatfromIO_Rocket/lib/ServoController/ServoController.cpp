@@ -1,8 +1,9 @@
 #include "ServoController.h"
 
 // Constructor
-ServoController::ServoController(int servoPin, int onAngle, int offAngle, int channel)
-    : pin(servoPin), angleOn(onAngle), angleOff(offAngle), channel(channel) {}
+ServoController::ServoController(ServoSetting servos_setting)
+    : pin(servos_setting.pin), angleOn(servos_setting.closeAngle), 
+    angleOff(servos_setting.openAngle), channel(servos_setting.id) {}
 
 // 初始化 PWM 頻率與分辨率
 void ServoController::begin() {

@@ -4,7 +4,7 @@
 
 class ServoController {
 public:
-    ServoController(int servoPin, int onAngle, int offAngle, int channel);
+    ServoController(ServoSetting servos_setting);
 
     void begin();
     void setServoAngle(bool newState);
