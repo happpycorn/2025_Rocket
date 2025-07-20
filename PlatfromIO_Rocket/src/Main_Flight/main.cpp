@@ -7,10 +7,10 @@ HFreqSensor* hfSensor[HFREQ_SENSOR_COUNT] = {
     new Hygrometer(HGYRP_DATA_ADDR)
 };
 
-ServoController servos[SERVO_COUNT] = {
-    ServoController(SERVO_PIN_1),
-    ServoController(SERVO_PIN_2),
-    ServoController(SERVO_PIN_3)
+ServoController* servos[SERVO_COUNT] = {
+    new ServoController(SERVO_PIN_1, OPEN_ANGLE, CLOSE_ANGLE, 1),
+    new ServoController(SERVO_PIN_2, OPEN_ANGLE, CLOSE_ANGLE, 2),
+    new ServoController(SERVO_PIN_3, OPEN_ANGLE, CLOSE_ANGLE, 3)
 };
 
 SDDataManager sd;

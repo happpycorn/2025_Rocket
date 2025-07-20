@@ -41,6 +41,8 @@ constexpr int LORA_BUFFER_LEN = 64;
 constexpr int SERVO_PIN_1 = 26;
 constexpr int SERVO_PIN_2 = 25;
 constexpr int SERVO_PIN_3 = 33;
+constexpr int OPEN_ANGLE = 35;
+constexpr int CLOSE_ANGLE = 90;
 
 // For Quene
 constexpr int QUEUE_LENGTH = 200;
