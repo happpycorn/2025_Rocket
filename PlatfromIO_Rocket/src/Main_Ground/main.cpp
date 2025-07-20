@@ -60,12 +60,12 @@ void loop() {
         portENTER_CRITICAL(&dataMux);
         data.last_recive_time = millis();
         data.recive_pack_count = r.data.pack_count;
+        data.slope_index = (data.slope_index + 1)%SLOPE_INDEX_MAX;
         data.slope_data[data.slope_index][0] = data.last_recive_time;
         for (int i = 1; i < 4; i++) data.slope_data[data.slope_index][i] = r.data.f[i-1];
         for (int i = 3; i < RECIVE_FLOAT_DATA_LEN; i++) data.attit_data[i] = r.data.f[i];
         for (int i = 0; i < RECIVE_BOOL_DATA_LEN; i++) data.rocket_state[i] = r.data.b[i];
         for (int i = 0; i < RECIVE_DOUBLE_DATA_LEN; i++) data.gps_data_d[i] = r.data.d[i];
-        data.slope_index = (data.slope_index + 1)%SLOPE_INDEX_MAX;
         portEXIT_CRITICAL(&dataMux);
 
         Serial.print("Recive:"); Serial.println(r.data.pack_count);

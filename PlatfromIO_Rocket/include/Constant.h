@@ -64,7 +64,7 @@ typedef struct {
     bool b[HF_BOOL_DATA_LEN];
 } HFreqSensorData;
 
-// 0~21 HFData, 22~32 GPS
+// 0~22 HFData, 23~33 GPS
 constexpr int LF_FLOAT_DATA_LEN = HF_FLOAT_DATA_LEN+11;
 constexpr int GPS_DATA_ADDR = HF_FLOAT_DATA_LEN;
 
