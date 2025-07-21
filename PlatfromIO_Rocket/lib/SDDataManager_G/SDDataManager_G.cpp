@@ -64,6 +64,8 @@ bool SDDataManager::saveData(const RecordData &data) {
     while (warning_index != data.warning_index) {
         warningfile.println(data.warning[warning_index]);
         warning_index = (warning_index+1)%WARNING_INDEX_MAX;
+        Serial.println(data.warning_index);
+        Serial.println(warning_index);
     }
 
     return true;

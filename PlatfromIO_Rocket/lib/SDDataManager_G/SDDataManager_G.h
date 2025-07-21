@@ -40,5 +40,5 @@ private:
         if (!end) file.print(',');
     }
 
-    int warning_index = 0;
+    int warning_index = 100;
 };
