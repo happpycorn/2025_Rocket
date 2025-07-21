@@ -1,7 +1,10 @@
 #include "SDDataManager_G.h"
 
+SPIClass mySPI(VSPI);
+
 bool SDDataManager::begin() {
-    if (!SD.begin(SD_CS_PIN)) return false;
+    mySPI.begin(21, 19, 18, SD_CS_PIN);
+    if (!SD.begin(SD_CS_PIN, mySPI)) return false;
     if (SD.exists(path)) return true;
 
     File file = SD.open(path, FILE_WRITE);

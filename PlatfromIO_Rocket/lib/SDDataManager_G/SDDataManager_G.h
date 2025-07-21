@@ -4,6 +4,8 @@
 #include <SPI.h>
 #include <SD.h>
 
+extern SPIClass mySPI;
+
 class SDDataManager {
 public:
     bool begin();
