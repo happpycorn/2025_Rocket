@@ -49,7 +49,7 @@ constexpr ServoSetting servos_settings[3] = {
     // Pin, Open_angle, Close_angle, Channel
     {26, 35, 90, 1},
     {25, 35, 90, 2},
-    {33, 90, 35, 3},
+    {33, 35, 90, 3},
 };
 
 // For Quene
