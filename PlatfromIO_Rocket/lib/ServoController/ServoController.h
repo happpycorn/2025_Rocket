@@ -1,21 +1,19 @@
 #pragma once
 
-#include <ESP32Servo.h>
+#include "Constant.h"
 
 class ServoController {
 public:
+    ServoController(ServoSetting servos_setting);
 
-    ServoController(int servoPin, int onAngle = 0, int offAngle = 120);
-    
     void begin();
     void setServoAngle(bool newState);
 
-    bool isOpen;
+    bool isOpen = false;
 
 private:
-
-    Servo servo;
     int pin;
     int angleOn;
     int angleOff;
+    int channel;
 };

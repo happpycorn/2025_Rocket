@@ -37,6 +37,21 @@ constexpr uint8_t TYPE_TEXT = 0x02;
 constexpr int BINARY_LENGTH = 46;
 constexpr int LORA_BUFFER_LEN = 64;
 
+// For Servo
+struct ServoSetting {
+    int pin;
+    int closeAngle;
+    int openAngle;
+    int id;
+};
+
+constexpr ServoSetting servos_settings[3] = {
+    // Pin, Open_angle, Close_angle, Channel
+    {26, 35, 90, 1},
+    {25, 35, 90, 2},
+    {33, 35, 90, 3},
+};
+
 // For Quene
 constexpr int QUEUE_LENGTH = 200;
 
@@ -59,7 +74,7 @@ typedef struct {
     bool b[HF_BOOL_DATA_LEN];
 } HFreqSensorData;
 
-// 0~21 HFData, 22~32 GPS
+// 0~22 HFData, 23~33 GPS
 constexpr int LF_FLOAT_DATA_LEN = HF_FLOAT_DATA_LEN+11;
 constexpr int GPS_DATA_ADDR = HF_FLOAT_DATA_LEN;
 

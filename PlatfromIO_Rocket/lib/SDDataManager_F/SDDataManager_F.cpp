@@ -1,29 +1,57 @@
 #include "SDDataManager_F.h"
 
 bool SDDataManager::begin() {
-    if (!SD.begin(SD_CS_PIN)) {  // 假設 SPI 接口的 CS 引腳是 5
-        return false;
+    if (!SD.begin(SD_CS_PIN)) return false;
+    if (SD.exists("/data.csv")) return true;
+
+    File file = SD.open("/data.csv", FILE_WRITE);
+    if (!file) return false;
+
+    // 寫入欄位名稱
+    file.print("index,");
+
+    for (int i = 0; i < LF_FLOAT_DATA_LEN; i++) {
+        file.print(f_labels[i]); file.print(',');
     }
+
+    for (int i = 0; i < LF_BOOL_DATA_LEN; i++) {
+        file.print(b_labels[i]); file.print(',');
+    }
+
+    for (int i = 0; i < LF_DOUBLE_DATA_LEN; i++) {
+        file.print(d_labels[i]);
+        if (i < LF_DOUBLE_DATA_LEN - 1) file.print(',');
+    }
+
+    file.println();
+    file.close();
+
     return true;
 }
 
 bool SDDataManager::saveData(const LFreqData &data) {
+    File file = SD.open("/data.csv", FILE_APPEND);
+    if (!file) return false;
 
-    LFreqData save_data;
+    index += 1;
+    file.print(index); file.print(',');
 
-    for (int i = 0; i < LF_FLOAT_DATA_LEN; i++) {save_data.f[i] = data.f[i];}
-
-    for (int i = 0; i < LF_BOOL_DATA_LEN; i++) {save_data.b[i] = data.b[i];}
-
-    for (int i = 0; i < LF_DOUBLE_DATA_LEN; i++) {save_data.d[i] = data.d[i];}
-
-    File file = SD.open("/data.bin", FILE_APPEND);  // 打開二進制文件進行寫入
-
-    if (!file) {
-        return false;
+    for (int i = 0; i < LF_FLOAT_DATA_LEN; i++) {
+        file.print(data.f[i], 6);  // 預設保留6位小數
+        file.print(',');
     }
 
-    file.write((uint8_t *)&save_data, sizeof(save_data));  // 直接將數據結構寫入文件
-    file.close();  // 關閉文件
+    for (int i = 0; i < LF_BOOL_DATA_LEN; i++) {
+        file.print(data.b[i] ? 1 : 0);
+        file.print(',');
+    }
+
+    for (int i = 0; i < LF_DOUBLE_DATA_LEN; i++) {
+        file.print(data.d[i], 8);  // double可以保留更多位數
+        if (i < LF_DOUBLE_DATA_LEN - 1) file.print(',');
+    }
+
+    file.println();  // 換行
+    file.close();
     return true;
 }

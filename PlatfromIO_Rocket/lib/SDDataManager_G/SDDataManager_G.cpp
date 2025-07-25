@@ -4,46 +4,69 @@ SPIClass mySPI(VSPI);
 
 bool SDDataManager::begin() {
     mySPI.begin(21, 19, 18, SD_CS_PIN);
+    if (!SD.begin(SD_CS_PIN, mySPI)) return false;
+    if (SD.exists(path)) return true;
 
-    if (!SD.begin(SD_CS_PIN, mySPI)) {  // 假設 SPI 接口的 CS 引腳是 5
-        return false;
+    File file = SD.open(path, FILE_WRITE);
+    if (!file) return false;
+    
+    // 寫入欄位名稱
+    for (const char* label : labels) file_print(file, label);
+    for (int i = 0; i < BOOL_DATA_LEN; i++) {
+        file.print("rocket_state_"); file.print(i); file.print(",");
     }
+    for (int i = 0; i < GPS_FLOAT_DATA_LEN; i++) {
+        file.print("local_gps_data_"); file.print(i); 
+        if (i < GPS_FLOAT_DATA_LEN - 1) file.print(',');
+    }
+
+    file.println();
+    file.close();
+
     return true;
 }
 
 bool SDDataManager::saveData(const RecordData &data) {
-    File file = SD.open("/reciveData.bin", FILE_APPEND);
+    File file = SD.open(path, FILE_APPEND);
     if (!file) return false;
 
-    // Sys
-    file.write((uint8_t*)&data.time, sizeof(data.time));
-    file.write((uint8_t*)&data.slope_index, sizeof(data.slope_index));
-    file.write((uint8_t*)&data.warning_index, sizeof(data.warning_index));
-    file.write((uint8_t*)&data.slope_overflow, sizeof(data.slope_overflow));
-    file.write((uint8_t*)&data.warning_overflow, sizeof(data.warning_overflow));
-
+    // 寫入 time 與系統狀態
+    file_print(file, data.time);
+    file_print(file, data.slope_index);
+    file_print(file, data.warning_index);
+    file_print(file, data.slope_overflow);
+    file_print(file, data.warning_overflow);
+    
     // Data - slope_data[SLOPE_INDEX_MAX][4]
-    file.write((uint8_t*)data.slope_data, sizeof(data.slope_data));
+    for (int i = 0; i < 4; i++) file_print(file, data.slope_data[data.slope_index][i]);
 
     // attit_data[3]
-    file.write((uint8_t*)data.attit_data, sizeof(data.attit_data));
-
-    // rocket_state[BOOL_DATA_LEN]
-    file.write((uint8_t*)data.rocket_state, sizeof(data.rocket_state));
+    for (int i = 0; i < 3; i++) file_print(file, data.attit_data[i]);
 
     // gps_data_d[DOUBLE_DATA_LEN]
-    file.write((uint8_t*)data.gps_data_d, sizeof(data.gps_data_d));
-
-    // local_gps_data_f[GPS_FLOAT_DATA_LEN]
-    file.write((uint8_t*)data.local_gps_data_f, sizeof(data.local_gps_data_f));
+    for (int i = 0; i < DOUBLE_DATA_LEN; i++) file_print(file, data.gps_data_d[i]);
 
     // LoRa
-    file.write((uint8_t*)&data.last_recive_time, sizeof(data.last_recive_time));
-    file.write((uint8_t*)&data.recive_pack_count, sizeof(data.recive_pack_count));
+    file_print(file, data.last_recive_time);
+    file_print(file, data.recive_pack_count);
 
-    // Warning (⚠ 不直接寫入 String 陣列 — 需轉成 C 字串或略過)
-    // 建議只記錄 warning_index 個字串，或改為純 char[][] 儲存
+    // rocket_state[BOOL_DATA_LEN]
+    for (int i = 0; i < BOOL_DATA_LEN; i++) file_print(file, data.rocket_state[i]);
 
+    // local_gps_data_f[GPS_FLOAT_DATA_LEN]
+    for (int i = 0; i < GPS_FLOAT_DATA_LEN; i++) file_print(file, data.local_gps_data_f[i], i == GPS_FLOAT_DATA_LEN - 1);
+    
+    file.println();
     file.close();
+
+    File warningfile = SD.open(warning_path, FILE_APPEND);
+    if (!warningfile) return false;
+    while (warning_index != data.warning_index) {
+        warningfile.println(data.warning[warning_index]);
+        warning_index = (warning_index+1)%WARNING_INDEX_MAX;
+        Serial.println(data.warning_index);
+        Serial.println(warning_index);
+    }
+
     return true;
 }

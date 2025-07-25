@@ -16,21 +16,19 @@ void MonitorServer::handleData() {
 
     int count_slope = current.slope_overflow ? SLOPE_INDEX_MAX : SLOPE_INDEX_MAX-current.slope_index;
     JsonArray slope = doc["slope_data"].to<JsonArray>();
-    for (int i = 0; i < count_slope; i++) {
+    for (int i = 1; i <= count_slope; i++) {
         JsonArray row = slope.add<JsonArray>();
-        for (int j = 0; j < 4; j++) {
-            row.add(current.slope_data[(i+current.slope_index)%SLOPE_INDEX_MAX][j]);
-        }
+        for (float i : current.slope_data[(i+current.slope_index)%SLOPE_INDEX_MAX]) row.add(i);
     }
 
     JsonArray attit = doc["attit_data"].to<JsonArray>();
-    for (int i = 0; i < 3; i++) attit.add(current.attit_data[i]);
+    for (float i : current.attit_data) attit.add(i);
 
     JsonArray rocket = doc["rocket_state"].to<JsonArray>();
-    for (int i = 0; i < 12; i++) rocket.add(current.rocket_state[i]);
+    for (bool i : current.rocket_state) rocket.add(i);
 
     JsonArray gps = doc["gps_data"].to<JsonArray>();
-    for (int i = 0; i < 4; i++) gps.add(current.gps_data_d[i]);
+    for (double i : current.gps_data_d) gps.add(i);
     
     doc["max_alt"] = current.max_alt;
 
