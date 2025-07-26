@@ -3,8 +3,8 @@
 constexpr int LAUNCH_1_UPPER_BOUND = 1500;
 constexpr int LAUNCH_2_UPPER_BOUND = 300;
 
-constexpr float STANDARD_PRESSURE_1 = 1007.05;
-constexpr float STANDARD_PRESSURE_2 = 1007.36;
+constexpr float STANDARD_PRESSURE_1 = 1003.39;
+constexpr float STANDARD_PRESSURE_2 = 1003.45;
 
 #include "Constant.h"
 #include "DataBuffer.h"

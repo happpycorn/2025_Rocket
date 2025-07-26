@@ -1,7 +1,10 @@
 #include "SDDataManager_G.h"
 
+SPIClass mySPI(VSPI);
+
 bool SDDataManager::begin() {
-    if (!SD.begin(SD_CS_PIN)) return false;
+    mySPI.begin(21, 19, 18, SD_CS_PIN);
+    if (!SD.begin(SD_CS_PIN, mySPI)) return false;
     if (SD.exists(path)) return true;
 
     File file = SD.open(path, FILE_WRITE);
@@ -61,6 +64,8 @@ bool SDDataManager::saveData(const RecordData &data) {
     while (warning_index != data.warning_index) {
         warningfile.println(data.warning[warning_index]);
         warning_index = (warning_index+1)%WARNING_INDEX_MAX;
+        Serial.println(data.warning_index);
+        Serial.println(warning_index);
     }
 
     return true;

@@ -35,6 +35,8 @@ void LowFreqTask(void *pvParameters) {
 
         // SD
         sd.saveData(current);
+
+        vTaskDelayUntil(&xLastWakeTime, xFrequencyTask2);
     }
 }
 
