@@ -1,6 +1,0 @@
-body { font-family: Arial; margin: 0; padding: 20px; }
-.grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-.box { border: 1px solid #ccc; padding: 15px; border-radius: 8px; }
-.status-item { display: flex; align-items: center; margin-bottom: 8px; }
-.status-color { width: 14px; height: 14px; border-radius: 3px; margin-right: 8px; }
-#map { height: 300px; }
