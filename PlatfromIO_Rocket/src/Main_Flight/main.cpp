@@ -39,6 +39,14 @@ void HighFreqTask(void *pvParameters) {
             data.f[BMP_DATA_ADDR_1+2], data.f[BMP_DATA_ADDR_2+2]
         );
 
+        if (data.f[SLOPE_DATA_ADDR+0] != data.f[SLOPE_DATA_ADDR+0]) {
+            
+            buffer.saveData(data);
+            vTaskDelayUntil(&xLastWakeTime, xFrequencyTask1);
+
+            continue;
+        }
+
         unsigned long long now = (unsigned long long)pdTICKS_TO_MS(xTaskGetTickCount());
         prc.decideDeployment(now, data.f, data.b);
 
