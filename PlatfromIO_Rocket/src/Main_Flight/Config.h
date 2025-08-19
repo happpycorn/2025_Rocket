@@ -7,7 +7,7 @@ constexpr float STANDARD_PRESSURE_1 = 1003.39;
 constexpr float STANDARD_PRESSURE_2 = 1003.45;
 
 #include "Constant.h"
-#include "DataBuffer.h"
+#include "DataBuffer_Debug.h"
 #include "GPSModule.h"
 #include "Hygrometer.h"
 #include "BMPController.h"
